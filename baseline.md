@@ -17,6 +17,27 @@ schedule, claude-api, claude-in-chrome, run, init, review, security-review.
   systematic-debugging, test-driven-development, using-git-worktrees, using-superpowers,
   verification-before-completion, writing-plans, writing-skills.
 
+## Agent architecture / multi-agent tooling
+
+Not previously documented here — added 2026-08-06 after the "agent architectures & multi-agent
+patterns" deep-dive research pass found the omission. Three tiers actually available, distinct
+from each other:
+
+- **Subagents** (`Agent` tool) — spawned within a session, report a summary back to the caller,
+  never talk to each other or share state directly. Named agent types available in this account's
+  sessions so far: `claude`, `claude-code-guide`, `Explore`, `general-purpose`, `Plan`,
+  `statusline-setup`. Superpowers' `dispatching-parallel-agents` skill operates at this same tier.
+- **`Workflow` tool** — deterministic multi-agent orchestration expressed as a script
+  (`pipeline()`/`parallel()` primitives, phases, schema-validated structured output). Documented
+  idioms include adversarial-verify and judge-panel patterns. Available in this account's sessions;
+  not yet used on any real task as of this baseline.
+- **Agent Teams** — a Claude Code platform feature (shipped February 2026 with Opus 4.6) where
+  multiple full Claude Code instances share a task list with lock-and-claim, message each other
+  directly, and one acts as orchestrator. **Experimental and disabled by default**
+  (`CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1`), with documented rough edges around session
+  resumption, task coordination, and shutdown. Not enabled anywhere; no current task identified
+  that needs full-instance teammates rather than subagent fan-out or the `Workflow` tool.
+
 ## MCP servers / integrations
 
 Connected via the platform's own connector system (claude.ai account-level), not local

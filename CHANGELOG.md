@@ -24,3 +24,16 @@ entry links to its full `decisions/` record.
 - **Evaluated 2 skills from a newly found marketplace** (`wshobson/agents`) — both declined
   (`pensyve`: unreviewed auto-running hooks; `tdd-workflows`: conflicts with superpowers). See
   `skills-seen.md`.
+- **Second weekly research pass: agent architectures/multi-agent patterns + first full per-plugin
+  skills scan of `claude-plugins-official` and `wshobson/agents`.** Recommended 3 plugins for the
+  next manual review to install (not installed in-session — see the ephemeral-sandbox decision
+  above): `playwright` (browser E2E, closes a gap already named in `baseline.md`), `block-no-verify`
+  (enforces the existing no-bypass-flags git rule as a hook), and `claude-code-setup` (automates
+  new-project tooling analysis). ~24 other plugins evaluated and rejected with reasons in
+  `skills-seen.md`. Added `baseline.md`'s missing "Agent architecture / multi-agent tooling"
+  section. See
+  [`research/2026-08-06-agent-architectures-multi-agent-patterns.md`](research/2026-08-06-agent-architectures-multi-agent-patterns.md),
+  [`decisions/2026-08-06-install-playwright.md`](decisions/2026-08-06-install-playwright.md),
+  [`decisions/2026-08-06-install-block-no-verify.md`](decisions/2026-08-06-install-block-no-verify.md),
+  and
+  [`decisions/2026-08-06-install-claude-code-setup.md`](decisions/2026-08-06-install-claude-code-setup.md).
