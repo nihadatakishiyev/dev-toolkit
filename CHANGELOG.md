@@ -14,3 +14,13 @@ entry links to its full `decisions/` record.
   [`specs/2026-08-06-continuous-self-improvement-design.md`](specs/2026-08-06-continuous-self-improvement-design.md).
 - **Set skills auto-install policy** (install new, review-before-retire old) — see
   [`decisions/2026-08-06-skills-autonomy.md`](decisions/2026-08-06-skills-autonomy.md).
+- **Created and ran the weekly research routine for the first time.** Confirmed the routine's cloud
+  sandbox is ephemeral, so its `claude plugin install` calls don't persist — corrected the skills
+  lane to *recommend* rather than install in-session. See
+  [`decisions/2026-08-06-fix-skills-autonomy-ephemeral-sandbox.md`](decisions/2026-08-06-fix-skills-autonomy-ephemeral-sandbox.md).
+  First deep-dive (MCP servers & integrations) written manually from the same verified findings
+  after the automated run hit a separate write-access blocker (see `baseline.md` known gaps) — see
+  [`research/2026-08-06-mcp-servers-integrations.md`](research/2026-08-06-mcp-servers-integrations.md).
+- **Evaluated 2 skills from a newly found marketplace** (`wshobson/agents`) — both declined
+  (`pensyve`: unreviewed auto-running hooks; `tdd-workflows`: conflicts with superpowers). See
+  `skills-seen.md`.

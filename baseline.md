@@ -57,6 +57,24 @@ e.g. Compass's, not a general-purpose one, so plain SSH push to a *new* repo fai
 not found" until this is done). A fresh sandbox will need this re-established; a persistent
 environment (the user's Mac, the VPS) should only need it once.
 
+## Weekly research routine
+
+`dev-toolkit-weekly-research` (trigger `trig_0177HnwudaaGY532cH8RcxGu`), Saturdays 09:00 UTC, runs
+against a fresh cloud checkout of this repo (`sources`), no MCP connectors attached. Two things
+learned from its first real run (2026-08-06), both now reflected in the spec:
+
+- **Its cloud sandbox is ephemeral** — no persisted `~/.claude/plugins`, so a skill it decides is
+  worth installing can't actually be installed *by it*; the carve-out now has it log a
+  recommendation instead (see `decisions/2026-08-06-fix-skills-autonomy-ephemeral-sandbox.md`).
+- **It can read/checkout this repo but can't push to it.** Confirmed via a real run, not assumed:
+  `git push` and the GitHub MCP write tools both failed with "GitHub access is not enabled for this
+  session — an org admin must connect the Claude GitHub App." This is a *different* permission than
+  the read/repo-visibility one already fixed (making the repo public + reconnecting the connector) —
+  reconnecting does not fix this one; it needs a GitHub OAuth App access-policy approval on the
+  account/org side. **Until this is resolved, the automated Saturday runs will do real research but
+  fail to land it** — check `git log` on `dev-toolkit` after the first scheduled run actually fires
+  (2026-08-08) to see whether it got fixed in the meantime or is still blocked.
+
 ## Known gaps (as of this baseline)
 
 - No cross-project memory or preference system — only this repo (decisions/reasoning) and
@@ -66,3 +84,5 @@ environment (the user's Mac, the VPS) should only need it once.
 - No established testing/verification skill usage pattern prior to installing superpowers
   (`test-driven-development`, `verification-before-completion` now available but unused so far).
 - No structured prompting-technique review has been done — current approach is ad hoc.
+- The scheduled routine's write access is blocked (see above) — its recommendations currently only
+  reach this repo via manual write-up, not automatically.

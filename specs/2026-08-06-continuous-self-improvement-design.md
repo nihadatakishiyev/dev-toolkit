@@ -98,17 +98,22 @@ between sessions.
 concrete instead of the scan rediscovering the same handful of plugins forever. A new marketplace
 being added counts as a `skills-seen.md` event too, not just individual plugins.
 
-**Skills lane carve-out** — the one place this routine can change live config on its own:
+**Skills lane carve-out** — the one place this routine acts on its own judgment without a review
+checkpoint, though as of `decisions/2026-08-06-fix-skills-autonomy-ephemeral-sandbox.md`, "acts"
+means *recommends*, not *installs in-session* — the routine's cloud sandbox is ephemeral, so a
+`claude plugin install` run inside it doesn't persist anywhere real:
 - A newly discovered marketplace that's clearly reputable (official, or well-established/maintained)
   gets added (`claude plugin marketplace add`) so its plugins are visible to future scans — logged
-  to `skills-seen.md`, not by itself installing anything.
+  to `skills-seen.md`. Harmless to do in-session since a future run just re-adds it from research if
+  the addition itself didn't persist either; low stakes either way.
 - A newly discovered skill (in an already-known or newly-added marketplace) that's (a) from a
   reputable source, (b) requires no new credentials/secrets, (c) doesn't conflict with an
   already-installed skill, and (d) clearly maps to a workflow actually in use (coding, research,
-  planning, testing, deployment, data work) — gets installed directly (`claude plugin install`),
-  logged to `CHANGELOG.md` + `skills-seen.md`, with a `decisions/` entry explaining why.
-- A skill that was evaluated and rejected also gets logged to `skills-seen.md` with the reason, so
-  it isn't re-evaluated next week either — same treatment as an install, minus the actual install.
+  planning, testing, deployment, data work) — gets logged as **recommended** in `skills-seen.md` and
+  `CHANGELOG.md`, with a `decisions/` entry drafted explaining why. The actual `claude plugin
+  install` runs during the next manual review pass, in a persistent environment where it sticks.
+- A skill that was evaluated and rejected gets logged to `skills-seen.md` with the reason, so it
+  isn't re-evaluated next week either.
 - A skill that looks outdated, or where a clearly better alternative was found, is **not**
   auto-removed — it goes into `research/` as a candidate, same as everything else, since retiring
   something already in use is more consequential than adding something new and reversible.
@@ -125,7 +130,7 @@ weekly cron fires (fresh git checkout of dev-toolkit)
   -> skills-marketplace scan (every week)
        -> diff against skills-seen.md -> only genuinely new entries
        -> new marketplace? add it -> skills-seen.md
-       -> new skill, clearly beneficial? install -> decisions/ + CHANGELOG.md + skills-seen.md
+       -> new skill, clearly beneficial? recommend (not install) -> decisions/ + CHANGELOG.md + skills-seen.md
        -> new skill, not beneficial? -> skills-seen.md (reason logged, not re-evaluated again)
   -> pick this week's deep-dive topic (rotation)
        -> web research -> compare vs baseline
@@ -145,10 +150,19 @@ separately, during normal work:
 - If a research pass can't find anything substantive for its topic that week, it still writes a
   short entry saying so (avoids silent no-ops looking like missed runs) and moves to the next
   topic next week.
-- If a skill install fails or misbehaves, that's a normal implementation problem — fix or revert
-  (`claude plugin uninstall`) and log the outcome; not a special case.
+- If a skill recommendation turns out wrong once actually installed during manual review, that's a
+  normal implementation problem — fix or revert (`claude plugin uninstall`) and log the outcome;
+  not a special case.
 - Nothing in this system has access to Compass's (or any other project's) secrets or credentials,
   so a failure here can't cascade into project-level damage.
+- **Known blocker (as of 2026-08-06):** the routine can read/checkout `dev-toolkit` but can't push
+  to it — confirmed via a real first run, not assumed. The error ("GitHub access is not enabled for
+  this session — an org admin must connect the Claude GitHub App") points to a GitHub OAuth App
+  access-policy approval distinct from whatever grants read/repo-picker visibility (which was
+  already fixed for this repo — see the repo's earlier visibility issue). Reconnecting the
+  connector does **not** fix this one. Until resolved, scheduled runs will produce real research
+  that never reaches `origin/main` — this needs to be checked before relying on the automated
+  Saturday runs actually landing anything.
 
 ## Testing / verification
 
