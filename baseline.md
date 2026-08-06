@@ -45,6 +45,18 @@ No `chromium-cli` available in sandboxed/cloud sessions. Compass has a small Pla
 Compass's own login flow. Not yet generalized into a reusable cross-project tool — worth
 revisiting if a second project needs the same thing.
 
+## Sandbox bootstrap notes
+
+Cloud/sandboxed sessions (see Compass's `docs/environments.md` for the fuller version of this
+pattern) start with almost nothing installed and no persisted auth — confirmed by having to
+install Deno, the Supabase CLI, Playwright, and `gh` from scratch in the session that created this
+repo. Specifically for **this repo**: pushing needs `gh auth login` (device-flow: `gh auth login
+--hostname github.com --git-protocol ssh --skip-ssh-key`, then `gh auth setup-git`, then use the
+`https://` remote URL — the SSH key present in a fresh sandbox is often a repo-scoped deploy key,
+e.g. Compass's, not a general-purpose one, so plain SSH push to a *new* repo fails with "Repository
+not found" until this is done). A fresh sandbox will need this re-established; a persistent
+environment (the user's Mac, the VPS) should only need it once.
+
 ## Known gaps (as of this baseline)
 
 - No cross-project memory or preference system — only this repo (decisions/reasoning) and
