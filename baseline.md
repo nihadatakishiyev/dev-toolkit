@@ -87,14 +87,15 @@ learned from its first real run (2026-08-06), both now reflected in the spec:
 - **Its cloud sandbox is ephemeral** — no persisted `~/.claude/plugins`, so a skill it decides is
   worth installing can't actually be installed *by it*; the carve-out now has it log a
   recommendation instead (see `decisions/2026-08-06-fix-skills-autonomy-ephemeral-sandbox.md`).
-- **It can read/checkout this repo but can't push to it.** Confirmed via a real run, not assumed:
-  `git push` and the GitHub MCP write tools both failed with "GitHub access is not enabled for this
-  session — an org admin must connect the Claude GitHub App." This is a *different* permission than
-  the read/repo-visibility one already fixed (making the repo public + reconnecting the connector) —
-  reconnecting does not fix this one; it needs a GitHub OAuth App access-policy approval on the
-  account/org side. **Until this is resolved, the automated Saturday runs will do real research but
-  fail to land it** — check `git log` on `dev-toolkit` after the first scheduled run actually fires
-  (2026-08-08) to see whether it got fixed in the meantime or is still blocked.
+- **Write-access blocker resolved.** The first real run's `git push` and the GitHub MCP write tools
+  both failed with "GitHub access is not enabled for this session — an org admin must connect the
+  Claude GitHub App." A second run the same day (2026-08-06, this pass) had working `mcp__github__*`
+  tools available from the start and `git push origin main` succeeded on the first try, landing
+  commit `4c1e0fd` directly — no workaround needed. Whatever needed the GitHub OAuth App
+  access-policy approval mentioned in the original blocker note appears to have been granted in the
+  meantime. Noting this rather than deleting the old blocker note outright, since this was only
+  confirmed working once — if a future scheduled Saturday run hits the same "GitHub access is not
+  enabled" error again, treat it as a regression worth investigating, not a first-time surprise.
 
 ## Known gaps (as of this baseline)
 
@@ -105,5 +106,3 @@ learned from its first real run (2026-08-06), both now reflected in the spec:
 - No established testing/verification skill usage pattern prior to installing superpowers
   (`test-driven-development`, `verification-before-completion` now available but unused so far).
 - No structured prompting-technique review has been done — current approach is ad hoc.
-- The scheduled routine's write access is blocked (see above) — its recommendations currently only
-  reach this repo via manual write-up, not automatically.
