@@ -11,6 +11,9 @@ is symlinked or synced — it's documentation and history, not runtime source of
 
 - `baseline.md` — living snapshot of the current setup (skills, MCP servers, global config). Each
   research pass diffs against this instead of re-deriving it from scratch.
+- `skills-seen.md` — every marketplace + plugin already evaluated (installed, or rejected with a
+  reason), so the weekly skills scan surfaces genuinely new things instead of rediscovering the
+  same plugins every week.
 - `specs/YYYY-MM-DD-<topic>.md` — full design docs for anything substantial enough to need one
   (like this system's own design).
 - `research/YYYY-MM-DD-<topic>.md` — dated notes from each scheduled research pass: what was
