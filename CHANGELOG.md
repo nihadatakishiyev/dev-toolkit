@@ -56,3 +56,18 @@ entry links to its full `decisions/` record.
   doesn't apply, not just when it does; enforced as a standing requirement for future entries too,
   not just today's two. See
   [`decisions/2026-08-06-quality-first-guardrail.md`](decisions/2026-08-06-quality-first-guardrail.md).
+- **Design/UI-UX deep-dive pass (user request), installed 3 plugins.** Researched SOTA UI/UX and
+  product design practices for AI-assisted development; grounded the "generic AI aesthetics"
+  finding against Compass's own unstyled `create-next-app` scaffold. Installed
+  `frontend-design@claude-plugins-official` (official, counters generic-AI-aesthetics), and
+  `modern-web-guidance@claude-plugins-official` (Google Chrome, 130+ web-platform/accessibility
+  checks) directly. Added a new marketplace (`impeccable`, github.com/pbakaus/impeccable, 56k★) and
+  installed its single companion plugin after reading its auto-running hook script to confirm it's
+  purely local/no-network before install. Evaluated and declined Figma/design-handoff MCP (no
+  current use case). Added a "UI/UX & product design" standing-instructions section to
+  `~/.claude/CLAUDE.md` (accessibility floor, screenshot self-critique loop, heuristic review pass)
+  so the installs actually get used, not just sit there. See
+  [`research/2026-08-06-design-ux.md`](research/2026-08-06-design-ux.md),
+  [`decisions/2026-08-06-install-design-plugins.md`](decisions/2026-08-06-install-design-plugins.md),
+  and
+  [`decisions/2026-08-06-design-workflow-standing-instructions.md`](decisions/2026-08-06-design-workflow-standing-instructions.md).

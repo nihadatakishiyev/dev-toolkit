@@ -1,14 +1,18 @@
 # Current setup baseline
 
-Snapshot as of 2026-08-06. Updated whenever a research pass finds it's gone stale, or an
-implemented change makes it inaccurate. This is what each weekly research pass diffs against —
-keep it factual and current, not aspirational.
+Snapshot as of 2026-08-06 (updated same day — design tooling pass). Updated whenever a research
+pass finds it's gone stale, or an implemented change makes it inaccurate. This is what each weekly
+research pass diffs against — keep it factual and current, not aspirational.
 
 ## Skills
 
 **Bundled (platform-provided, not self-managed):** dataviz, artifact-design, artifact-diagramming,
 artifact-capabilities, update-config, keybindings-help, simplify, fewer-permission-prompts, loop,
-schedule, claude-api, claude-in-chrome, run, init, review, security-review.
+schedule, claude-api, claude-in-chrome, run, init, review, security-review, design-sync,
+design-login (the latter two backed by the native `DesignSync` tool — read/write access to
+claude.ai/design design-system projects, incremental component-library sync; found during the
+2026-08-06 design-tooling pass, not previously documented here — unused so far, no current project
+has a claude.ai/design project to sync against).
 
 **Installed plugins:**
 - `superpowers@superpowers-dev` (v6.2.0, user scope, github.com/obra/superpowers) — 14 skills:
@@ -21,9 +25,34 @@ schedule, claude-api, claude-in-chrome, run, init, review, security-review.
   tailored hooks/skills/MCP servers/subagents for it.
 - `block-no-verify@claude-code-workflows` (v1.0.1, from `wshobson/agents`) — `PreToolUse` hook
   blocking `--no-verify`/`--no-gpg-sign`/other git-hook-skipping flags.
+- `frontend-design@claude-plugins-official` (Anthropic, official) — design-quality skill: steers
+  away from "generic AI aesthetics," brainstorm→token-plan→critique→build workflow, accessibility
+  floor, copywriting guidance. See `research/2026-08-06-design-ux.md`.
+- `modern-web-guidance@claude-plugins-official` (Google Chrome, v0.0.179) — 130+ web-platform
+  best-practice checks (CSS/layout, forms, performance, accessibility), local-only/no API key.
+- `impeccable@impeccable` (v4.0.4, Paul Bakaus) — 23 design slash-commands
+  (polish/audit/critique/harden/typeset/...), companion to `frontend-design`. Ships local-only
+  `PostToolUse`/`Stop` hooks on Edit/Write (verified no network calls/exec before install).
 
 **Configured marketplaces:** `claude-plugins-official` (default), `superpowers-dev`
-(github.com/obra/superpowers), `claude-code-workflows` (github.com/wshobson/agents).
+(github.com/obra/superpowers), `claude-code-workflows` (github.com/wshobson/agents), `impeccable`
+(github.com/pbakaus/impeccable — added 2026-08-06, design-focused, single plugin).
+
+## Design / UI-UX (added 2026-08-06)
+
+See `research/2026-08-06-design-ux.md` for the full deep-dive. Summary of current state:
+- Plugin tooling: `frontend-design` + `modern-web-guidance` + `impeccable` (all above).
+- `~/.claude/CLAUDE.md` has a standing "UI/UX & product design" section (accessibility floor,
+  screenshot self-critique loop, Nielsen heuristic pass, `frontend-design` for non-trivial UI work)
+  — scoped to real UI/product surfaces, not throwaway/internal tooling.
+- Design-to-code MCP (Figma/Framelink) evaluated and explicitly declined — no current use case,
+  no project's UI originates from design files.
+- Known gap, not yet closed: no Compass-specific design-tokens/constraints doc exists yet (the
+  thing that would make `frontend-design`'s choices stick consistently project-to-project instead
+  of being re-derived each session) — deferred until real Compass UI work is happening, not written
+  speculatively. Also: Compass's own UI (`app/globals.css`) is still unstyled `create-next-app`
+  scaffold — a real, identified opportunity, not yet acted on (out of scope for a tooling pass, not
+  requested).
 
 ## Agent architecture / multi-agent tooling
 
