@@ -37,3 +37,9 @@ entry links to its full `decisions/` record.
   [`decisions/2026-08-06-install-block-no-verify.md`](decisions/2026-08-06-install-block-no-verify.md),
   and
   [`decisions/2026-08-06-install-claude-code-setup.md`](decisions/2026-08-06-install-claude-code-setup.md).
+- **Write-access blocker resolved** — the GitHub App was granted access to all repos; the routine's
+  third run (its second research pass) pushed successfully on the first try, confirmed live.
+- **Installed the 3 recommended plugins** (`playwright`, `block-no-verify`, `claude-code-setup`) —
+  manual review confirmed the routine's reasoning and installed all three in this persistent
+  environment. See
+  [`decisions/2026-08-06-manual-review-installs-three-recommended.md`](decisions/2026-08-06-manual-review-installs-three-recommended.md).

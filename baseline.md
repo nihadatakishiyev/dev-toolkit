@@ -16,6 +16,14 @@ schedule, claude-api, claude-in-chrome, run, init, review, security-review.
   receiving-code-review, requesting-code-review, subagent-driven-development,
   systematic-debugging, test-driven-development, using-git-worktrees, using-superpowers,
   verification-before-completion, writing-plans, writing-skills.
+- `playwright@claude-plugins-official` (Microsoft) — browser automation/E2E testing MCP server.
+- `claude-code-setup@claude-plugins-official` (v1.0.0) — analyzes a codebase and recommends
+  tailored hooks/skills/MCP servers/subagents for it.
+- `block-no-verify@claude-code-workflows` (v1.0.1, from `wshobson/agents`) — `PreToolUse` hook
+  blocking `--no-verify`/`--no-gpg-sign`/other git-hook-skipping flags.
+
+**Configured marketplaces:** `claude-plugins-official` (default), `superpowers-dev`
+(github.com/obra/superpowers), `claude-code-workflows` (github.com/wshobson/agents).
 
 ## Agent architecture / multi-agent tooling
 
