@@ -41,7 +41,8 @@ Two loosely-coupled halves:
 1. **A weekly scheduled research routine** (Claude Code's native cron-based scheduled-routine
    mechanism — not `/loop`, which is for tight iteration inside one active session, not
    multi-day-gap background work). Each firing is a stateless invocation: it reads this repo for
-   context, does one topic's worth of research, writes what it found, and exits.
+   context, does a skills scan plus one deep-dive topic's worth of research, writes what it found,
+   and exits.
 2. **A manual review-and-implement pass**, done by Claude during ordinary work (opportunistically —
    starting a new project, or on request), that reads the accumulated backlog in `research/` and
    acts on what's worth acting on.
@@ -55,21 +56,27 @@ work from what's already been logged.
 **`baseline.md`** — the "what do we currently have" reference. Read at the start of every research
 pass so it isn't re-derived from scratch each time; updated whenever a pass finds it's drifted.
 
-**Weekly research routine** — topic rotation (repeats after all are covered, so revisiting old
-topics as the ecosystem changes is expected, not a bug):
-1. MCP servers & integrations
-2. Agent architectures & multi-agent patterns
-3. Prompting techniques
-4. Memory systems
-5. Testing/verification approaches
-6. Tooling/infrastructure/automation
-7. Skills (see carve-out below — this lane behaves differently from the other six)
+**Weekly research routine** does two things every single firing, not one topic per week — skill
+discovery was specifically called out as wanting to be *continuous*, so it doesn't sit in the same
+slow rotation as everything else and only get attention once every seven weeks:
 
-Each firing: read `baseline.md` + the last few `research/` entries (avoid repeating a topic covered
-last week), pick the next topic, search for current state-of-the-art, compare against baseline,
-write `research/YYYY-MM-DD-<topic>.md` covering what was found and candidate improvements rated by
-rough impact/effort. Update `baseline.md` if it's gone stale. Commit and push. Send a short push
-notification summarizing the finding(s) so it isn't silently invisible between sessions.
+1. **A quick skills-marketplace scan** (every week) — check for newly available skills across
+   configured marketplaces. See the carve-out below for what happens with what's found.
+2. **One deep-dive topic** (rotates weekly, repeats after all are covered — revisiting old topics
+   as the ecosystem changes is expected, not a bug):
+   1. MCP servers & integrations
+   2. Agent architectures & multi-agent patterns
+   3. Prompting techniques
+   4. Memory systems
+   5. Testing/verification approaches
+   6. Tooling/infrastructure/automation
+
+Each firing: read `baseline.md` + the last few `research/` entries (avoid repeating a deep-dive
+topic covered last week), do the skills scan, do the week's deep-dive topic, compare both against
+baseline, write `research/YYYY-MM-DD-<topic>.md` covering what was found and candidate
+improvements rated by rough impact/effort. Update `baseline.md` if it's gone stale. Commit and
+push. Send a short push notification summarizing the finding(s) so it isn't silently invisible
+between sessions.
 
 **Skills lane carve-out** — the one place this routine can change live config on its own:
 - A newly discovered skill that's (a) from a reputable source (official marketplace or a
@@ -90,11 +97,11 @@ unimplemented candidates, prioritize by impact vs. effort, implement what clears
 ```
 weekly cron fires
   -> read baseline.md + recent research/
-  -> pick topic (rotation)
-  -> web research
-  -> compare vs baseline
-  -> write research/YYYY-MM-DD-<topic>.md
-  -> [skills lane only] install if clearly beneficial -> decisions/ + CHANGELOG.md
+  -> skills-marketplace scan (every week)
+       -> install if clearly beneficial -> decisions/ + CHANGELOG.md
+  -> pick this week's deep-dive topic (rotation)
+       -> web research -> compare vs baseline
+  -> write research/YYYY-MM-DD-<topic>.md (covers both)
   -> update baseline.md if stale
   -> commit, push, push-notify
 
