@@ -71,3 +71,9 @@ entry links to its full `decisions/` record.
   [`decisions/2026-08-06-install-design-plugins.md`](decisions/2026-08-06-install-design-plugins.md),
   and
   [`decisions/2026-08-06-design-workflow-standing-instructions.md`](decisions/2026-08-06-design-workflow-standing-instructions.md).
+- **Sharpened the Haiku-routing boundary** — user feedback while reviewing the Compass redesign's
+  Phase 0 plan: the rule should read as covering genuinely repetitive/simple tasks only, explicitly
+  not complete redesigns or critical implementations, and a *product's* own AI-feature model choice
+  (e.g. an Edge Function calling the Anthropic API) is a separate decision from *my own* subagent
+  dispatch, not something to justify by analogy to this rule. See
+  [`decisions/2026-08-06-sharpen-haiku-routing-boundary.md`](decisions/2026-08-06-sharpen-haiku-routing-boundary.md).
