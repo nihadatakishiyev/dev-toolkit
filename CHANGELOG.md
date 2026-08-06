@@ -43,3 +43,16 @@ entry links to its full `decisions/` record.
   manual review confirmed the routine's reasoning and installed all three in this persistent
   environment. See
   [`decisions/2026-08-06-manual-review-installs-three-recommended.md`](decisions/2026-08-06-manual-review-installs-three-recommended.md).
+- **Broadened scope beyond skills** (user request) — the weekly routine now also does a
+  token-efficiency check every run, not just a rotation topic, and the design's framing is now
+  explicitly "state of the art AI-assisted software development," not skills-centric.
+- **Created `~/.claude/CLAUDE.md`** — the missing mechanism for a *behavioral* decision (not just a
+  plugin install) to actually change future sessions. First entries: explicit Haiku routing for
+  cheap/high-volume subagent work, memory-system discipline. See
+  [`decisions/2026-08-06-global-claude-md.md`](decisions/2026-08-06-global-claude-md.md) and
+  [`research/2026-08-06-token-efficiency-and-agent-landscape.md`](research/2026-08-06-token-efficiency-and-agent-landscape.md).
+- **Added an explicit quality-first boundary to the token-efficiency section** — user feedback:
+  don't trade quality for token savings. Every efficiency instruction now has to state when it
+  doesn't apply, not just when it does; enforced as a standing requirement for future entries too,
+  not just today's two. See
+  [`decisions/2026-08-06-quality-first-guardrail.md`](decisions/2026-08-06-quality-first-guardrail.md).

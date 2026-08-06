@@ -19,15 +19,21 @@ future project, not just this one.
   repeated.
 - Regular (weekly), low-effort research covering the areas that actually move: MCP
   servers/integrations, agent architectures/multi-agent patterns, prompting techniques, memory
-  systems, testing/verification approaches, tooling/infrastructure/automation, and skills
-  specifically.
+  systems, testing/verification approaches, tooling/infrastructure/automation, skills, and token
+  efficiency/context management specifically — the full breadth of "state of the art AI-assisted
+  software development," not skills in isolation.
 - A clear, safe autonomy boundary: what happens without a human in the loop vs. what waits for
   review.
 
 ## Non-goals
 
-- Not a dotfiles/config-management system. This repo doesn't own or sync `~/.claude/` — it
-  documents changes made there, it doesn't apply them structurally.
+- Not a dotfiles/config-management system. This repo doesn't own or sync all of `~/.claude/` — it
+  documents changes made there, it doesn't apply most of them structurally. The one deliberate
+  exception is `~/.claude/CLAUDE.md` itself (see `decisions/2026-08-06-global-claude-md.md`) — a
+  single, small, human-readable file this system maintains as its "compiled output" for behavioral
+  decisions, not a general sync/symlink mechanism. `~/.claude/plugins` (skill installs) is managed
+  by `claude plugin install` directly, same distinction — targeted, specific actions, not wholesale
+  config ownership.
 - Not per-message overhead. Nothing here should run, or be checked, on every conversation turn —
   only at the start of new project work, on request, or on the weekly schedule.
 - Not fully autonomous infrastructure change. Anything touching credentials, permissions, or with
@@ -57,28 +63,43 @@ The two halves communicate only through this repo's files — the routine never 
 session, and a live session doesn't need the routine to be running to do useful implementation
 work from what's already been logged.
 
-**Push notification status: unverified pending first real run.** Whether a scheduled routine
-session can call the notification tool the way an interactive session can isn't confirmed by the
-scheduling mechanism's own documentation — the plan is to try it on the first real/test firing and
-fall back to "the commit itself is the notification" (visible via `git log` / GitHub) if it turns
-out not to be available in that execution context.
+**Push notification status: still not explicitly confirmed either way** after 3 real runs
+(2026-08-06) — the routine was instructed to attempt it, but nobody has explicitly confirmed a
+notification actually arrived from one of these runs (as opposed to just noticing the commit in
+`git log`). Worth deliberately checking on the next scheduled Saturday firing rather than assuming
+either outcome. Fallback either way: the commit itself is a sufficient notification.
 
 ## Components
 
 **`baseline.md`** — the "what do we currently have" reference. Read at the start of every research
 pass so it isn't re-derived from scratch each time; updated whenever a pass finds it's drifted.
 
-**Weekly research routine** does two things every single firing, not one topic per week — skill
-discovery was specifically called out as wanting to be *continuous*, so it doesn't sit in the same
-slow rotation as everything else and only get attention once every seven weeks:
+**Weekly research routine** does three things every single firing, not one topic per week — skill
+discovery and token efficiency were both specifically called out as wanting to be *continuous*, so
+neither sits in the same slow rotation as everything else, only getting attention once every seven
+weeks:
 
 1. **A quick skills-marketplace scan** (every week) — check for newly available skills across
    configured marketplaces (`claude plugin marketplace list` for what's configured, plus general
    research into whether other reputable marketplace sources exist that aren't yet added), diffed
    against `skills-seen.md` (see below) so the same plugin isn't re-evaluated every single week.
    See the carve-out below for what happens with what's found.
-2. **One deep-dive topic** (rotates weekly, repeats after all are covered — revisiting old topics
-   as the ecosystem changes is expected, not a bug):
+2. **A token-efficiency/context-management check** (every week) — is there a newly relevant
+   technique (prompt caching, context editing/compaction, subagent model routing, delegation
+   patterns, compression) not yet reflected in `~/.claude/CLAUDE.md`'s "Token efficiency" section?
+   Most of the actual mechanism here is platform-managed (automatic prompt caching, harness-level
+   auto-compaction) — this check is about workflow-level technique (how work gets delegated, which
+   model a subagent uses, what gets read in full vs. targeted), not re-litigating the platform's own
+   internals every week. **Quality bar, not just a cost bar**: a candidate technique only gets
+   recommended if it costs nothing real in output quality — user feedback specifically flagged that
+   low-quality work costs more later (rework, bugs, bad decisions) than tokens saved now. Every
+   entry added to `~/.claude/CLAUDE.md` under this section must say when the technique should
+   *not* apply, not just when it should — an efficiency instruction with no stated boundary is how
+   this quietly degrades into "always cut corners" over time.
+3. **One deep-dive topic** (rotates weekly, repeats after all are covered — revisiting old topics
+   as the ecosystem changes is expected, not a bug). Framing: this list *is* "state of the art
+   AI-assisted software development / autonomous coding agents," broken into the pieces that
+   actually move independently of each other:
    1. MCP servers & integrations
    2. Agent architectures & multi-agent patterns
    3. Prompting techniques
@@ -86,12 +107,19 @@ slow rotation as everything else and only get attention once every seven weeks:
    5. Testing/verification approaches
    6. Tooling/infrastructure/automation
 
-Each firing: read `baseline.md` + the last few `research/` entries (avoid repeating a deep-dive
-topic covered last week), do the skills scan, do the week's deep-dive topic, compare both against
-baseline, write `research/YYYY-MM-DD-<topic>.md` covering what was found and candidate
-improvements rated by rough impact/effort. Update `baseline.md` if it's gone stale. Commit and
-push. Send a short push notification summarizing the finding(s) so it isn't silently invisible
-between sessions.
+Each firing: read `baseline.md` + `~/.claude/CLAUDE.md` + the last few `research/` entries (avoid
+repeating a deep-dive topic covered last week), do the skills scan, do the token-efficiency check,
+do the week's deep-dive topic, compare all three against baseline, write
+`research/YYYY-MM-DD-<topic>.md` covering what was found and candidate improvements rated by rough
+impact/effort. Update `baseline.md` if it's gone stale. Commit and push. Send a short push
+notification summarizing the finding(s) so it isn't silently invisible between sessions.
+
+**`~/.claude/CLAUDE.md`** (global, outside this repo — see
+`decisions/2026-08-06-global-claude-md.md`) — the currently-active, short summary of standing
+behavioral instructions, loaded into every session automatically. `dev-toolkit` is the durable
+reasoning/history; this file is what actually changes future behavior. Any decision meant to affect
+*how Claude operates* (not just what's installed) gets distilled into this file during the manual
+review pass, same as a plugin recommendation gets an actual `claude plugin install`.
 
 **`skills-seen.md`** — a manifest of every marketplace+plugin combination already evaluated
 (installed, or explicitly rejected with a one-line reason) so "newly available" means something
@@ -126,15 +154,17 @@ unimplemented candidates, prioritize by impact vs. effort, implement what clears
 
 ```
 weekly cron fires (fresh git checkout of dev-toolkit)
-  -> read baseline.md + skills-seen.md + recent research/
+  -> read baseline.md + ~/.claude/CLAUDE.md + skills-seen.md + recent research/
   -> skills-marketplace scan (every week)
        -> diff against skills-seen.md -> only genuinely new entries
        -> new marketplace? add it -> skills-seen.md
        -> new skill, clearly beneficial? recommend (not install) -> decisions/ + CHANGELOG.md + skills-seen.md
        -> new skill, not beneficial? -> skills-seen.md (reason logged, not re-evaluated again)
+  -> token-efficiency check (every week)
+       -> new technique not yet in ~/.claude/CLAUDE.md? recommend -> decisions/ + CHANGELOG.md
   -> pick this week's deep-dive topic (rotation)
        -> web research -> compare vs baseline
-  -> write research/YYYY-MM-DD-<topic>.md (covers both)
+  -> write research/YYYY-MM-DD-<topic>.md (covers all three)
   -> update baseline.md if stale
   -> commit, push, attempt push-notify (see note above)
 
@@ -155,14 +185,12 @@ separately, during normal work:
   not a special case.
 - Nothing in this system has access to Compass's (or any other project's) secrets or credentials,
   so a failure here can't cascade into project-level damage.
-- **Known blocker (as of 2026-08-06):** the routine can read/checkout `dev-toolkit` but can't push
-  to it — confirmed via a real first run, not assumed. The error ("GitHub access is not enabled for
-  this session — an org admin must connect the Claude GitHub App") points to a GitHub OAuth App
-  access-policy approval distinct from whatever grants read/repo-picker visibility (which was
-  already fixed for this repo — see the repo's earlier visibility issue). Reconnecting the
-  connector does **not** fix this one. Until resolved, scheduled runs will produce real research
-  that never reaches `origin/main` — this needs to be checked before relying on the automated
-  Saturday runs actually landing anything.
+- **Resolved blocker (2026-08-06, same day as discovery):** the routine's first run could
+  read/checkout `dev-toolkit` but couldn't push (`GitHub access is not enabled for this session —
+  an org admin must connect the Claude GitHub App`) — a GitHub OAuth App access-policy approval,
+  distinct from the read/repo-visibility permission already fixed. User granted the Claude GitHub
+  App access to all repos on GitHub's side; the very next run pushed successfully on the first try,
+  confirmed live via `git log`. Kept here as history rather than deleted in case it regresses.
 
 ## Testing / verification
 

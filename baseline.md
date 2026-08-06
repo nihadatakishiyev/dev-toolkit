@@ -60,12 +60,18 @@ different (also available) mechanism not currently used anywhere.
 - `settings.json`: statusline command, dark theme, `superpowers@superpowers-dev` enabled,
   `agentPushNotifEnabled: true`. No custom permission allowlists, no custom hooks beyond what the
   superpowers plugin adds (one `SessionStart` hook).
-- No global `CLAUDE.md`.
+- `~/.claude/CLAUDE.md` — created 2026-08-06 (see `decisions/2026-08-06-global-claude-md.md`).
+  Short, currently-active standing instructions distilled from this repo's decisions; this repo
+  stays the durable reasoning/history. Current sections: token efficiency (explicit Haiku routing
+  for cheap/high-volume subagent work; prefer targeted reads over whole-file reads), memory
+  discipline.
 - Memory system exists (`~/.claude/projects/<project-hash>/memory/`) but is **project-scoped by
   working directory**, not global — a memory saved in one project's session isn't visible in
   another project's session. It was unused (empty) as of this baseline, despite real
   feedback/project facts worth capturing during the Compass session that created this repo — worth
-  being more disciplined about using it going forward, project by project.
+  being more disciplined about using it going forward, project by project. (Reinforced in
+  `~/.claude/CLAUDE.md` as of 2026-08-06, not yet re-verified whether it's actually being used more
+  since.)
 
 ## Browser E2E testing
 
