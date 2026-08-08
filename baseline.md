@@ -1,8 +1,9 @@
 # Current setup baseline
 
-Snapshot as of 2026-08-06 (updated same day — design tooling pass). Updated whenever a research
-pass finds it's gone stale, or an implemented change makes it inaccurate. This is what each weekly
-research pass diffs against — keep it factual and current, not aspirational.
+Snapshot as of 2026-08-06, last updated 2026-08-08 (prompting-techniques weekly pass — closed the
+"no prompting review done" known gap, noted the `claude-mem` memory-tool rejection). Updated
+whenever a research pass finds it's gone stale, or an implemented change makes it inaccurate. This
+is what each weekly research pass diffs against — keep it factual and current, not aspirational.
 
 ## Skills
 
@@ -143,9 +144,19 @@ learned from its first real run (2026-08-06), both now reflected in the spec:
 ## Known gaps (as of this baseline)
 
 - No cross-project memory or preference system — only this repo (decisions/reasoning) and
-  per-project memory (facts specific to that codebase).
+  per-project memory (facts specific to that codebase). Best candidate found so far to close this,
+  `claude-mem` (88.5k★), was still rejected on 2026-08-08 — its automatic-hooks footprint is larger
+  than the two previously-rejected memory tools, not smaller; would need an actual read of its
+  worker-service source before it clears the bar. See `research/2026-08-08-prompting-techniques.md`.
 - No local `.mcp.json` used anywhere yet — unclear if/when that's preferable to the platform
   connector system.
 - No established testing/verification skill usage pattern prior to installing superpowers
   (`test-driven-development`, `verification-before-completion` now available but unused so far).
-- No structured prompting-technique review has been done — current approach is ad hoc.
+- ~~No structured prompting-technique review has been done~~ — done 2026-08-08
+  (`research/2026-08-08-prompting-techniques.md`): found current practice (superpowers'
+  plan/execute/verify skills, this repo's own `specs/` workflow, subagent-dispatch patterns) already
+  substantially aligned with 2026 SOTA (spec-driven development, PLAN/ACT/VERIFY/ITERATE framing,
+  meta-prompting/step-back decomposition) — a confirming pass, not a gap-closing one. One concrete,
+  actionable finding came out of it (effort-level routing for `Workflow` agent dispatch,
+  independent of the existing model-routing rule) but it's filed under token-efficiency, not here,
+  since it's a delegation-pattern lever rather than a prompt-wording one.

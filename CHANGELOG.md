@@ -77,3 +77,25 @@ entry links to its full `decisions/` record.
   (e.g. an Edge Function calling the Anthropic API) is a separate decision from *my own* subagent
   dispatch, not something to justify by analogy to this rule. See
   [`decisions/2026-08-06-sharpen-haiku-routing-boundary.md`](decisions/2026-08-06-sharpen-haiku-routing-boundary.md).
+
+## 2026-08-08
+
+- **Third weekly research pass: prompting techniques deep-dive + full re-scan of both large
+  marketplaces.** Mostly a confirming pass — current practice (superpowers' plan/execute/verify
+  skills, this repo's own `specs/` workflow) already tracks 2026 SOTA (spec-driven development,
+  meta-prompting/step-back decomposition); closes the "no prompting-technique review done" known
+  gap in `baseline.md`. Recommended installing `context7` (Upstash library-docs MCP server,
+  348k+ installs, no required credential) and adding explicit effort-level routing for
+  `Workflow`-dispatched agents to `~/.claude/CLAUDE.md`'s token-efficiency section (a second,
+  independent knob alongside the existing Haiku model-routing rule, same required
+  never-for-judgment-work boundary). Evaluated and rejected `claude-mem` (88.5k★ memory plugin) —
+  reads as the strongest cross-project-memory candidate yet by reputation, but its actual
+  `hooks.json` shows a *larger* automatic background-worker footprint than the two previously
+  rejected memory tools, not a smaller one; flagged as a revisit candidate contingent on an actual
+  source read, not ruled out permanently. ~15 other plugins evaluated individually and rejected
+  (credential requirements, no mapped workflow, overlap with installed skills); the long unlisted
+  tail in both large marketplaces (~327 plugins combined) bulk-logged with reasoning rather than
+  itemized. See
+  [`research/2026-08-08-prompting-techniques.md`](research/2026-08-08-prompting-techniques.md),
+  [`decisions/2026-08-08-install-context7.md`](decisions/2026-08-08-install-context7.md), and
+  [`decisions/2026-08-08-token-efficiency-effort-routing.md`](decisions/2026-08-08-token-efficiency-effort-routing.md).
