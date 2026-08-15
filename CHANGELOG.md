@@ -3,6 +3,28 @@
 Running index of changes actually implemented (not just researched/proposed). Newest first, each
 entry links to its full `decisions/` record.
 
+## 2026-08-15
+
+- **Weekly research pass: memory systems deep-dive + skills scan re-swept `claude-plugins-official`
+  (284 → 286 plugins).** Recommended 2 new plugins for the next manual review to install (not
+  installed in-session — cloud sandbox is ephemeral): `chrome-devtools-mcp` (live browser
+  debugging/inspection, distinct from the already-installed `playwright`'s test-automation role) and
+  `typescript-lsp` (first-party TypeScript language server, matches Compass's actual stack). ~13
+  other newly-itemized plugins evaluated and rejected with reasons in `skills-seen.md`. See
+  [`research/2026-08-15-memory-systems.md`](research/2026-08-15-memory-systems.md),
+  [`decisions/2026-08-15-install-chrome-devtools-mcp.md`](decisions/2026-08-15-install-chrome-devtools-mcp.md),
+  and
+  [`decisions/2026-08-15-install-typescript-lsp.md`](decisions/2026-08-15-install-typescript-lsp.md).
+- **Recommended a token-efficiency technique for `~/.claude/CLAUDE.md`**: use `.claude/rules/`
+  path-scoped instruction files (loaded only when a matching file is read) instead of always-loaded
+  `CLAUDE.md` content, for instructions that are genuinely conditional on file type/location — with
+  an explicit boundary excluding anything that must hold regardless of which file is touched. Not
+  yet applied — goes through manual review. See
+  [`decisions/2026-08-15-token-efficiency-path-scoped-rules.md`](decisions/2026-08-15-token-efficiency-path-scoped-rules.md).
+- **Updated `baseline.md`**: documented the subagent-level `memory` field and `.claude/rules/`
+  (both new findings from this run), refreshed marketplace/plugin counts, noted the
+  still-pending 2026-08-08 effort-routing recommendation.
+
 ## 2026-08-06
 
 - **Installed `superpowers` plugin** (v6.2.0, user scope) — see

@@ -1,9 +1,10 @@
 # Current setup baseline
 
-Snapshot as of 2026-08-06, last updated 2026-08-08 (prompting-techniques weekly pass — closed the
-"no prompting review done" known gap, noted the `claude-mem` memory-tool rejection). Updated
-whenever a research pass finds it's gone stale, or an implemented change makes it inaccurate. This
-is what each weekly research pass diffs against — keep it factual and current, not aspirational.
+Snapshot as of 2026-08-06, last updated 2026-08-15 (memory-systems weekly pass — added the
+`.claude/rules/` and subagent-memory-field detail, recommended `chrome-devtools-mcp` +
+`typescript-lsp`). Updated whenever a research pass finds it's gone stale, or an implemented change
+makes it inaccurate. This is what each weekly research pass diffs against — keep it factual and
+current, not aspirational.
 
 ## Skills
 
@@ -35,9 +36,19 @@ has a claude.ai/design project to sync against).
   (polish/audit/critique/harden/typeset/...), companion to `frontend-design`. Ships local-only
   `PostToolUse`/`Stop` hooks on Edit/Write (verified no network calls/exec before install).
 
-**Configured marketplaces:** `claude-plugins-official` (default), `superpowers-dev`
-(github.com/obra/superpowers), `claude-code-workflows` (github.com/wshobson/agents), `impeccable`
-(github.com/pbakaus/impeccable — added 2026-08-06, design-focused, single plugin).
+**Configured marketplaces:** `claude-plugins-official` (default, 286 plugins as of 2026-08-15, up
+from 284), `superpowers-dev` (github.com/obra/superpowers), `claude-code-workflows`
+(github.com/wshobson/agents, 95 plugins, unchanged since 2026-08-08), `impeccable`
+(github.com/pbakaus/impeccable — added 2026-08-06, design-focused, single plugin), `thedotmack`
+(github.com/thedotmack/claude-mem — added 2026-08-08, single plugin, rejected — see Known gaps).
+Note: the weekly routine's cloud sandbox is ephemeral, so none of these persist between runs; each
+run re-adds them from this list to inspect current listings (see "Weekly research routine" below).
+
+**Recommended, not yet installed (pending next manual review):** `context7` (2026-08-08,
+library-documentation-lookup MCP server), `chrome-devtools-mcp` and `typescript-lsp` (2026-08-15,
+live browser debugging and TypeScript language-server integration respectively — see
+`decisions/2026-08-15-install-chrome-devtools-mcp.md` and
+`decisions/2026-08-15-install-typescript-lsp.md`).
 
 ## Design / UI-UX (added 2026-08-06)
 
@@ -95,13 +106,26 @@ different (also available) mechanism not currently used anywhere.
   stays the durable reasoning/history. Current sections: token efficiency (explicit Haiku routing
   for cheap/high-volume subagent work; prefer targeted reads over whole-file reads), memory
   discipline.
-- Memory system exists (`~/.claude/projects/<project-hash>/memory/`) but is **project-scoped by
-  working directory**, not global — a memory saved in one project's session isn't visible in
-  another project's session. It was unused (empty) as of this baseline, despite real
-  feedback/project facts worth capturing during the Compass session that created this repo — worth
-  being more disciplined about using it going forward, project by project. (Reinforced in
-  `~/.claude/CLAUDE.md` as of 2026-08-06, not yet re-verified whether it's actually being used more
-  since.)
+- **Auto memory** (Claude's own accumulated notes — distinct from `CLAUDE.md`, which is
+  user-written) lives at `~/.claude/projects/<project>/memory/`, keyed by git repo (shared across
+  worktrees/subdirectories of the same repo), on by default (`autoMemoryEnabled`), with a
+  `MEMORY.md` entrypoint (200-line/25KB load cap, self-curated) plus on-demand topic files.
+  **Project-scoped**, not global — a memory saved in one project's session isn't visible in
+  another's. It was unused (empty) as of the 2026-08-06 baseline; not yet re-verified whether it's
+  actually being used more since being reinforced in `~/.claude/CLAUDE.md`.
+- **Subagents can have their own separate memory** via a `memory: user|project|local` field in a
+  custom subagent's frontmatter (`.claude/agents/*.md`) — found during the 2026-08-15 deep-dive
+  (`research/2026-08-15-memory-systems.md`). Depends on the session's own auto memory being enabled
+  (no independent toggle). **Not currently actionable**: no project tracked here defines any custom
+  subagents yet — this account's available agent types (`claude`, `claude-code-guide`, `Explore`,
+  `general-purpose`, `Plan`, `statusline-setup`) are all platform-provided, not project-defined.
+  Revisit when a project has a repeatedly-invoked custom subagent worth giving persistent memory to.
+- **`.claude/rules/`** (and user-level `~/.claude/rules/`) — path-scoped instruction files, distinct
+  from both `CLAUDE.md` and auto memory: markdown files that load into context only when Claude
+  reads a file matching their `paths:` frontmatter glob, instead of loading at every session start.
+  Found 2026-08-15; not yet used anywhere. See
+  `decisions/2026-08-15-token-efficiency-path-scoped-rules.md` for the drafted recommendation (not
+  yet applied) on when to use this for `~/.claude/CLAUDE.md` itself as it grows.
 
 ## Browser E2E testing
 
