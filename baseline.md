@@ -164,6 +164,9 @@ learned from its first real run (2026-08-06), both now reflected in the spec:
   meantime. Noting this rather than deleting the old blocker note outright, since this was only
   confirmed working once — if a future scheduled Saturday run hits the same "GitHub access is not
   enabled" error again, treat it as a regression worth investigating, not a first-time surprise.
+- **Still holding as of 2026-08-15** (this run) — `git push origin main` succeeded on the first try
+  again, no workaround needed. Third consecutive successful run since the fix; this note can likely
+  be retired soon if it keeps holding, but kept for now per the same "note, don't delete yet" logic.
 
 ## Known gaps (as of this baseline)
 
