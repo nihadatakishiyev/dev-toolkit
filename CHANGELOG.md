@@ -3,6 +3,23 @@
 Running index of changes actually implemented (not just researched/proposed). Newest first, each
 entry links to its full `decisions/` record.
 
+## 2026-08-22
+
+- **Fifth weekly research pass: testing/verification deep-dive.** A confirming pass on both fronts
+  that didn't clear the bar for a new install or a token-efficiency change — skills scan evaluated
+  14 previously-unitemized plugins across both large marketplaces (rejected: credential
+  requirements, no mapped workflow, or duplicates of installed/bundled capability — notably
+  `avoid-ai-writing` duplicates the bundled `unslop` skill, and `javascript-typescript` duplicates
+  the already-recommended `typescript-lsp`); token-efficiency check found nothing beyond
+  platform-level mechanism already carved out of scope. The substantive finding was for
+  `baseline.md` itself: added a dedicated "Testing / verification" section (previously just a line
+  in Known gaps) documenting the native `/goal` command as an independent-evaluator verification
+  mechanism in its own right, not just the reason `ralph-wiggum` was rejected — and flagged that the
+  `Workflow` tool's adversarial-verify/judge-panel idioms are now on their second consecutive
+  baseline mention as "documented, never actually used." `claude-code-workflows` marketplace shrank
+  95 → 92 plugins (two previously-rejected plugins dropped out; not acted on). See
+  [`research/2026-08-22-testing-verification-approaches.md`](research/2026-08-22-testing-verification-approaches.md).
+
 ## 2026-08-15
 
 - **Weekly research pass: memory systems deep-dive + skills scan re-swept `claude-plugins-official`

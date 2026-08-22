@@ -1,10 +1,10 @@
 # Current setup baseline
 
-Snapshot as of 2026-08-06, last updated 2026-08-15 (memory-systems weekly pass — added the
-`.claude/rules/` and subagent-memory-field detail, recommended `chrome-devtools-mcp` +
-`typescript-lsp`). Updated whenever a research pass finds it's gone stale, or an implemented change
-makes it inaccurate. This is what each weekly research pass diffs against — keep it factual and
-current, not aspirational.
+Snapshot as of 2026-08-06, last updated 2026-08-22 (testing/verification weekly pass — added a
+dedicated Testing/verification section, documented the native `/goal` command as a verification
+mechanism in its own right, updated marketplace plugin counts). Updated whenever a research pass
+finds it's gone stale, or an implemented change makes it inaccurate. This is what each weekly
+research pass diffs against — keep it factual and current, not aspirational.
 
 ## Skills
 
@@ -36,11 +36,13 @@ has a claude.ai/design project to sync against).
   (polish/audit/critique/harden/typeset/...), companion to `frontend-design`. Ships local-only
   `PostToolUse`/`Stop` hooks on Edit/Write (verified no network calls/exec before install).
 
-**Configured marketplaces:** `claude-plugins-official` (default, 286 plugins as of 2026-08-15, up
-from 284), `superpowers-dev` (github.com/obra/superpowers), `claude-code-workflows`
-(github.com/wshobson/agents, 95 plugins, unchanged since 2026-08-08), `impeccable`
-(github.com/pbakaus/impeccable — added 2026-08-06, design-focused, single plugin), `thedotmack`
-(github.com/thedotmack/claude-mem — added 2026-08-08, single plugin, rejected — see Known gaps).
+**Configured marketplaces:** `claude-plugins-official` (default, 286 plugins, unchanged since
+2026-08-15), `superpowers-dev` (github.com/obra/superpowers), `claude-code-workflows`
+(github.com/wshobson/agents, 92 plugins as of 2026-08-22, down from 95 — two previously-rejected
+plugins, `qa-orchestra` and `ciagent`, dropped out of the listing; not acted on, removals from
+third-party marketplaces aren't tracked), `impeccable` (github.com/pbakaus/impeccable — added
+2026-08-06, design-focused, single plugin), `thedotmack` (github.com/thedotmack/claude-mem — added
+2026-08-08, single plugin, rejected — see Known gaps).
 Note: the weekly routine's cloud sandbox is ephemeral, so none of these persist between runs; each
 run re-adds them from this list to inspect current listings (see "Weekly research routine" below).
 
@@ -86,6 +88,34 @@ from each other:
   (`CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1`), with documented rough edges around session
   resumption, task coordination, and shutdown. Not enabled anywhere; no current task identified
   that needs full-instance teammates rather than subagent fan-out or the `Workflow` tool.
+
+## Testing / verification
+
+Added 2026-08-22 after the "testing/verification approaches" deep-dive found the omission (this
+topic previously only appeared as a line in Known gaps, not its own section, unlike the other five
+rotation topics). Current state:
+
+- **Skill-level:** superpowers' `test-driven-development`, `verification-before-completion`, and
+  `systematic-debugging` — installed since 2026-08-06, still not exercised on a real task as of
+  this baseline (same "installed, unused" note carried forward from the prior snapshot).
+- **`Workflow`-tool-level:** documented adversarial-verify and judge-panel idioms (independent
+  skeptic subagents that try to refute a finding; multi-persona panels for ambiguous judgment
+  calls) — available, **still not used on any real task** as of this baseline. This is now the
+  second consecutive deep-dive pass noting this same "documented, zero real-task usage" gap; see
+  `research/2026-08-22-testing-verification-approaches.md` for the explicit flag not to just let
+  this line get copy-pasted forward a third time without someone actually trying it.
+- **Native `/goal` command** (Claude Code v2.1.139+, May 2026) — not previously documented here as
+  a verification mechanism in its own right (baseline only mentioned it in passing as the reason
+  `ralph-wiggum` was rejected). Declares a completion condition; after every turn, a separate fresh
+  evaluator model (defaults to Haiku) checks that condition against the conversation and returns
+  yes/no + reason, independent of the model doing the work. No install required. Limitation: the
+  evaluator only judges what's already in the conversation — it doesn't independently re-run
+  commands or read files itself, so it complements but doesn't replace an actual test/build run.
+  Distinct from `Stop` hooks, which are settings/team-scoped rather than session-scoped and *can*
+  shell out to real checks.
+- **Bundled skills:** `review`, `security-review` cover code-review-shaped verification; no
+  dedicated eval/benchmark framework installed (`deepeval`, `codspeed` both evaluated and rejected
+  — see `skills-seen.md` — no project currently runs an eval harness against a shipped AI feature).
 
 ## MCP servers / integrations
 
@@ -164,9 +194,11 @@ learned from its first real run (2026-08-06), both now reflected in the spec:
   meantime. Noting this rather than deleting the old blocker note outright, since this was only
   confirmed working once — if a future scheduled Saturday run hits the same "GitHub access is not
   enabled" error again, treat it as a regression worth investigating, not a first-time surprise.
-- **Still holding as of 2026-08-15** (this run) — `git push origin main` succeeded on the first try
-  again, no workaround needed. Third consecutive successful run since the fix; this note can likely
-  be retired soon if it keeps holding, but kept for now per the same "note, don't delete yet" logic.
+- **Still holding as of 2026-08-15** — `git push origin main` succeeded on the first try again, no
+  workaround needed. Third consecutive successful run since the fix.
+- **Still holding as of 2026-08-22** (this run) — fourth consecutive successful push, first try, no
+  workaround. This note can likely be retired soon if it keeps holding, but kept for now per the
+  same "note, don't delete yet" logic.
 
 ## Known gaps (as of this baseline)
 
@@ -177,8 +209,10 @@ learned from its first real run (2026-08-06), both now reflected in the spec:
   worker-service source before it clears the bar. See `research/2026-08-08-prompting-techniques.md`.
 - No local `.mcp.json` used anywhere yet — unclear if/when that's preferable to the platform
   connector system.
-- No established testing/verification skill usage pattern prior to installing superpowers
-  (`test-driven-development`, `verification-before-completion` now available but unused so far).
+- ~~No established testing/verification skill usage pattern prior to installing superpowers~~ — now
+  has a dedicated "Testing / verification" section above (added 2026-08-22); the underlying gap
+  itself (skills/tools installed and documented, still not exercised on a real task) remains open,
+  just tracked there now instead of here.
 - ~~No structured prompting-technique review has been done~~ — done 2026-08-08
   (`research/2026-08-08-prompting-techniques.md`): found current practice (superpowers'
   plan/execute/verify skills, this repo's own `specs/` workflow, subagent-dispatch patterns) already
