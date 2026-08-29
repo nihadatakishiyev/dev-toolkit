@@ -1,10 +1,11 @@
 # Current setup baseline
 
-Snapshot as of 2026-08-06, last updated 2026-08-22 (testing/verification weekly pass — added a
-dedicated Testing/verification section, documented the native `/goal` command as a verification
-mechanism in its own right, updated marketplace plugin counts). Updated whenever a research pass
-finds it's gone stale, or an implemented change makes it inaccurate. This is what each weekly
-research pass diffs against — keep it factual and current, not aspirational.
+Snapshot as of 2026-08-06, last updated 2026-08-29 (tooling/infrastructure/automation weekly pass —
+noted the bundled skill roster had drifted from what was documented here, most notably
+`session-start-hook` as an unaddressed fix for the sandbox-bootstrap pain point, and updated
+marketplace plugin counts). Updated whenever a research pass finds it's gone stale, or an
+implemented change makes it inaccurate. This is what each weekly research pass diffs against — keep
+it factual and current, not aspirational.
 
 ## Skills
 
@@ -14,7 +15,20 @@ schedule, claude-api, claude-in-chrome, run, init, review, security-review, desi
 design-login (the latter two backed by the native `DesignSync` tool — read/write access to
 claude.ai/design design-system projects, incremental component-library sync; found during the
 2026-08-06 design-tooling pass, not previously documented here — unused so far, no current project
-has a claude.ai/design project to sync against).
+has a claude.ai/design project to sync against). Also present in the 2026-08-29 run's session (not
+previously listed here — the bundled roster is evidently larger/more session-dependent than this
+list captured): `session-start-hook` (creates a repo's `SessionStart` hook so cloud/web sessions can
+run tests/linters without manual setup — directly relevant to the "Sandbox bootstrap notes" pain
+point below, see `research/2026-08-29-tooling-infrastructure-automation.md`), `design` (canvas/
+artboard design tool, distinct from `design-sync`/`design-login`), `workflow-authoring` (the
+reference skill backing the `Workflow` tool, see "Agent architecture" below), `docx`,
+`import-memory`, `morning`, `pdf`, `pptx`, `skill-creator`, `unslop`, `xlsx`. That same session
+did *not* show `schedule`, `claude-in-chrome`, `design-sync`, `design-login`, or `review` (it
+showed `code-review` instead) — plausibly connector-/feature-gated absences specific to that
+ephemeral cloud sandbox rather than actual removals, but not independently confirmed; worth
+reconfirming from a normal persistent-environment session, including whether `review` was
+genuinely renamed to `code-review` (several `skills-seen.md` rejection rows cite `review` by that
+name and would need a corresponding update if so).
 
 **Installed plugins:**
 - `superpowers@superpowers-dev` (v6.2.0, user scope, github.com/obra/superpowers) — 14 skills:
@@ -36,13 +50,15 @@ has a claude.ai/design project to sync against).
   (polish/audit/critique/harden/typeset/...), companion to `frontend-design`. Ships local-only
   `PostToolUse`/`Stop` hooks on Edit/Write (verified no network calls/exec before install).
 
-**Configured marketplaces:** `claude-plugins-official` (default, 286 plugins, unchanged since
-2026-08-15), `superpowers-dev` (github.com/obra/superpowers), `claude-code-workflows`
-(github.com/wshobson/agents, 92 plugins as of 2026-08-22, down from 95 — two previously-rejected
-plugins, `qa-orchestra` and `ciagent`, dropped out of the listing; not acted on, removals from
-third-party marketplaces aren't tracked), `impeccable` (github.com/pbakaus/impeccable — added
-2026-08-06, design-focused, single plugin), `thedotmack` (github.com/thedotmack/claude-mem — added
-2026-08-08, single plugin, rejected — see Known gaps).
+**Configured marketplaces:** `claude-plugins-official` (default, 291 plugins as of 2026-08-29, up
+from 286), `superpowers-dev` (github.com/obra/superpowers), `claude-code-workflows`
+(github.com/wshobson/agents, 93 plugins as of 2026-08-29, up from 92), `impeccable`
+(github.com/pbakaus/impeccable — added 2026-08-06, design-focused, single plugin), `thedotmack`
+(github.com/thedotmack/claude-mem — added 2026-08-08, 2 plugins as of 2026-08-29 —
+`claude-mem`/`claude-mem-cowork` — both rejected, see Known gaps). Also evaluated and declined:
+`tonsofskills.com` (`jeremylongshore/tons-of-skills-marketplace`, 471 plugins/3,069 skills, same
+maintainer/project as the already-rejected `claude-code-plugins-plus-skills`, just rebranded —
+same infeasible-vetting-at-scale reasoning, not added).
 Note: the weekly routine's cloud sandbox is ephemeral, so none of these persist between runs; each
 run re-adds them from this list to inspect current listings (see "Weekly research routine" below).
 
@@ -176,6 +192,12 @@ e.g. Compass's, not a general-purpose one, so plain SSH push to a *new* repo fai
 not found" until this is done). A fresh sandbox will need this re-established; a persistent
 environment (the user's Mac, the VPS) should only need it once.
 
+**Candidate fix, not yet applied:** the bundled `session-start-hook` skill (noticed 2026-08-29, see
+"Skills" above) exists specifically to turn manual bootstrap steps like these into a real
+`SessionStart` hook instead of a doc a human/agent has to follow by hand each time. Worth trying on
+Compass first (`docs/environments.md` already documents the steps to convert) before considering it
+for this repo's own smaller bootstrap needs.
+
 ## Weekly research routine
 
 `dev-toolkit-weekly-research` (trigger `trig_0177HnwudaaGY532cH8RcxGu`), Saturdays 09:00 UTC, runs
@@ -196,9 +218,11 @@ learned from its first real run (2026-08-06), both now reflected in the spec:
   enabled" error again, treat it as a regression worth investigating, not a first-time surprise.
 - **Still holding as of 2026-08-15** — `git push origin main` succeeded on the first try again, no
   workaround needed. Third consecutive successful run since the fix.
-- **Still holding as of 2026-08-22** (this run) — fourth consecutive successful push, first try, no
+- **Still holding as of 2026-08-22** — fourth consecutive successful push, first try, no
   workaround. This note can likely be retired soon if it keeps holding, but kept for now per the
   same "note, don't delete yet" logic.
+- **Still holding as of 2026-08-29** (this run) — fifth consecutive successful push, first try, no
+  workaround.
 
 ## Known gaps (as of this baseline)
 

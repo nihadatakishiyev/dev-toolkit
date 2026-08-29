@@ -3,6 +3,27 @@
 Running index of changes actually implemented (not just researched/proposed). Newest first, each
 entry links to its full `decisions/` record.
 
+## 2026-08-29
+
+- **Sixth weekly research pass: tooling/infrastructure/automation deep-dive (rotation complete,
+  wraps back to MCP servers & integrations next week).** No plugin cleared the recommend bar this
+  week — `hol-guard` (wshobson/agents) came closest conceptually (local pre-install security
+  vetting for AI agent tools, directly mirroring this repo's own mission) but was rejected on
+  maturity/footprint grounds: v0.1.0, 4★, and it installs a fail-closed hook gating *every* tool
+  call, a larger automatic-interception footprint than the memory tools (`pensyve`/`remember`/
+  `claude-mem`) already rejected for smaller footprints with more track record. ~49 other
+  previously-unitemized `claude-code-workflows` plugins evaluated and bulk-rejected (no mapped
+  workflow, or duplicates of installed/bundled capability). `tonsofskills.com` identified as the
+  same maintainer's project as the already-rejected `claude-code-plugins-plus-skills`, just
+  rebranded — not a new marketplace. No new token-efficiency technique cleared the bar either; the
+  research entry instead flags that three prior plugin recommendations and two token-efficiency
+  drafts have been sitting unreviewed for 2-3 weeks. The substantive finding was for `baseline.md`
+  itself: the bundled-skill roster had drifted from what was documented there, most notably
+  `session-start-hook` — an unused, no-install skill that directly targets the "Sandbox bootstrap
+  notes" pain point (fresh cloud sessions reinstalling tooling from scratch) this repo has
+  documented as unresolved since its first day. See
+  [`research/2026-08-29-tooling-infrastructure-automation.md`](research/2026-08-29-tooling-infrastructure-automation.md).
+
 ## 2026-08-22
 
 - **Fifth weekly research pass: testing/verification deep-dive.** A confirming pass on both fronts
