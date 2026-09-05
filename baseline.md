@@ -94,6 +94,15 @@ from each other:
   never talk to each other or share state directly. Named agent types available in this account's
   sessions so far: `claude`, `claude-code-guide`, `Explore`, `general-purpose`, `Plan`,
   `statusline-setup`. Superpowers' `dispatching-parallel-agents` skill operates at this same tier.
+  Separately, `subagent_type: "fork"` (found 2026-09-05, see
+  `research/2026-09-05-mcp-servers-integrations.md`) is a distinct mode, not a named type: it
+  inherits the entire parent conversation (system prompt, tools, model — always the parent's model,
+  the `model` override is ignored for it — full history) instead of starting cold, reusing the
+  parent's prompt cache on its first request. Cheaper than a fresh subagent when the subtask
+  genuinely needs prior context; worse than one for independent/adversarial verification or when
+  the parent conversation is mostly irrelevant bulk. See
+  `decisions/2026-09-05-token-efficiency-fork-subagent.md` (drafted recommendation, not yet applied
+  to `~/.claude/CLAUDE.md`).
 - **`Workflow` tool** — deterministic multi-agent orchestration expressed as a script
   (`pipeline()`/`parallel()` primitives, phases, schema-validated structured output). Documented
   idioms include adversarial-verify and judge-panel patterns. Available in this account's sessions;
@@ -135,12 +144,31 @@ rotation topics). Current state:
 
 ## MCP servers / integrations
 
-Connected via the platform's own connector system (claude.ai account-level), not local
-`.mcp.json` — no such file exists in any project checked so far. Currently connected:
-Supabase, Wallet (BudgetBakers), Gmail, Google Calendar, Google Drive. Adding a new one requires
-the user to connect it via the claude.ai UI, not something installable from a session directly —
-unless a project specifically wants a local, project-scoped MCP server via `.mcp.json`, which is a
-different (also available) mechanism not currently used anywhere.
+Three distinct mechanisms identified so far (last two both added to this doc 2026-09-05, see
+`research/2026-09-05-mcp-servers-integrations.md`):
+
+- **Platform connector system** (claude.ai account-level), not local `.mcp.json` — no such file
+  exists in any project checked so far. Currently connected: Supabase, Wallet (BudgetBakers),
+  Gmail, Google Calendar, Google Drive. Adding a new one requires the user to connect it via the
+  claude.ai UI, not something installable from a session directly. A native `SearchMcpRegistry`
+  tool can search this same account-level directory by keyword from within a session (returns
+  install state, sample tools, whether enabled in the current chat) — it doesn't connect anything
+  itself, but lets a session proactively surface a specific real connector by name instead of only
+  reacting once a user names one.
+- **Project-scoped `.mcp.json`** — a different, also-available mechanism; not currently used
+  anywhere.
+- **Session/environment-level MCP tools** — pre-configured for a specific session by the execution
+  environment itself, not attached by the user and not a project file. This weekly routine's own
+  cloud session is an example: it gets repo-scoped `mcp__github__*` tools supplied directly by the
+  remote execution environment, distinct from both mechanisms above (scoped to which repos that
+  particular session was granted, not an account-wide toggle or a file in the repo).
+
+Also noted 2026-09-05: the MCP protocol itself had a substantial spec revision (2026-07-28) —
+`sampling`/`roots`/SSE-based logging deprecated in favor of a multi-round-trip elicitation
+mechanism, plus new "MCP Apps" (tools returning interactive HTML UI in a sandboxed iframe). Doesn't
+change anything about how MCP is used here (nothing here authors/hosts MCP servers), but is a
+useful freshness signal for future server evaluations — visible adoption of the new spec vs.
+legacy long-lived-SSE patterns.
 
 ## Global config (`~/.claude/`)
 
@@ -221,8 +249,12 @@ learned from its first real run (2026-08-06), both now reflected in the spec:
 - **Still holding as of 2026-08-22** — fourth consecutive successful push, first try, no
   workaround. This note can likely be retired soon if it keeps holding, but kept for now per the
   same "note, don't delete yet" logic.
-- **Still holding as of 2026-08-29** (this run) — fifth consecutive successful push, first try, no
+- **Still holding as of 2026-08-29** — fifth consecutive successful push, first try, no
   workaround.
+- **Still holding as of 2026-09-05** (this run) — sixth consecutive successful push, first try, no
+  workaround. This note has now held for a full month across six runs; per the "note, don't delete
+  yet" logic it'll keep being carried forward, but at this point a regression would be the
+  surprising outcome, not the other way around.
 
 ## Known gaps (as of this baseline)
 

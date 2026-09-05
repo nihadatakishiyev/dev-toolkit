@@ -3,6 +3,30 @@
 Running index of changes actually implemented (not just researched/proposed). Newest first, each
 entry links to its full `decisions/` record.
 
+## 2026-09-05
+
+- **Seventh weekly research pass: MCP servers & integrations deep-dive (rotation restarts).** No
+  plugin cleared the recommend bar — `superself` (wshobson/agents, new this week) is the
+  best-behaved memory/state-tracking candidate seen yet (zero auto-running hooks, unlike
+  `pensyve`/`remember`/`claude-mem`) but was rejected on plain immaturity (~2-week-old repo, 4
+  stars, solo/duo team); flagged as a revisit candidate. `claude-market/marketplace` evaluated as a
+  new marketplace and not added (thin reputability signal, same shape as the already-rejected
+  `xiaolai` marketplace). **Recommended (not applied): a `fork`-vs-fresh-subagent delegation rule
+  for the token-efficiency section** — this harness's `Agent` tool supports a context-inheriting
+  `subagent_type: "fork"` mode, previously undocumented here, that reuses the parent's prompt cache
+  instead of restating context in a fresh subagent's prompt; recommended with an explicit
+  boundary against using it for independent verification or when the parent context is mostly
+  irrelevant bulk. See
+  [`decisions/2026-09-05-token-efficiency-fork-subagent.md`](decisions/2026-09-05-token-efficiency-fork-subagent.md).
+  `baseline.md` updated in place (not just flagged) for two smaller factual findings that don't
+  need review-gating: the MCP section now documents three distinct MCP mechanisms instead of two
+  (the account-level connector system, project `.mcp.json`, and this routine's own
+  session/environment-level GitHub MCP tools), plus a native `SearchMcpRegistry` connector-directory
+  search tool; the Agent architecture section now lists the `fork` subagent mode itself as an
+  available capability (documenting that it exists is factual, separate from the token-efficiency
+  policy recommendation about when to use it, which still goes through review). See
+  [`research/2026-09-05-mcp-servers-integrations.md`](research/2026-09-05-mcp-servers-integrations.md).
+
 ## 2026-08-29
 
 - **Sixth weekly research pass: tooling/infrastructure/automation deep-dive (rotation complete,
