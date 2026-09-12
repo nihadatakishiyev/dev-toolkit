@@ -1,11 +1,11 @@
 # Current setup baseline
 
-Snapshot as of 2026-08-06, last updated 2026-08-29 (tooling/infrastructure/automation weekly pass —
-noted the bundled skill roster had drifted from what was documented here, most notably
-`session-start-hook` as an unaddressed fix for the sandbox-bootstrap pain point, and updated
-marketplace plugin counts). Updated whenever a research pass finds it's gone stale, or an
-implemented change makes it inaccurate. This is what each weekly research pass diffs against — keep
-it factual and current, not aspirational.
+Snapshot as of 2026-08-06, last updated 2026-09-12 (agent-architectures-&-multi-agent-patterns
+weekly pass — added the `claude-plugins-community` marketplace, mapped current agent-tooling tiers
+against Anthropic's own published five-pattern taxonomy, and refreshed marketplace plugin counts).
+Updated whenever a research pass finds it's gone stale, or an implemented change makes it
+inaccurate. This is what each weekly research pass diffs against — keep it factual and current, not
+aspirational.
 
 ## Skills
 
@@ -50,15 +50,24 @@ name and would need a corresponding update if so).
   (polish/audit/critique/harden/typeset/...), companion to `frontend-design`. Ships local-only
   `PostToolUse`/`Stop` hooks on Edit/Write (verified no network calls/exec before install).
 
-**Configured marketplaces:** `claude-plugins-official` (default, 291 plugins as of 2026-08-29, up
-from 286), `superpowers-dev` (github.com/obra/superpowers), `claude-code-workflows`
-(github.com/wshobson/agents, 93 plugins as of 2026-08-29, up from 92), `impeccable`
+**Configured marketplaces:** `claude-plugins-official` (default, 295 plugins as of 2026-09-12, up
+from 291), `superpowers-dev` (github.com/obra/superpowers), `claude-code-workflows`
+(github.com/wshobson/agents, 94 plugins as of 2026-09-12, unchanged since 2026-09-05), `impeccable`
 (github.com/pbakaus/impeccable — added 2026-08-06, design-focused, single plugin), `thedotmack`
-(github.com/thedotmack/claude-mem — added 2026-08-08, 2 plugins as of 2026-08-29 —
-`claude-mem`/`claude-mem-cowork` — both rejected, see Known gaps). Also evaluated and declined:
+(github.com/thedotmack/claude-mem — added 2026-08-08, 2 plugins as of 2026-09-12 —
+`claude-mem`/`claude-mem-cowork` — both rejected, see Known gaps), `claude-plugins-community`
+(`claude-community`, github.com/anthropics/claude-plugins-community — added 2026-09-12, first-party
+Anthropic-run **community** marketplace, distinct from `claude-plugins-official`: anyone submits a
+plugin, it passes automated security scanning, and it's synced in nightly — 2,282 plugins as of
+2026-09-12, far larger than anything else configured, and reputable only as a *host*; individual
+plugins there still need the same per-plugin reputability vetting as any third-party source, since
+passing an automated security scan is a materially weaker bar than "well-established/maintained,"
+see `research/2026-09-12-agent-architectures-multi-agent-patterns.md`). Also evaluated and declined:
 `tonsofskills.com` (`jeremylongshore/tons-of-skills-marketplace`, 471 plugins/3,069 skills, same
-maintainer/project as the already-rejected `claude-code-plugins-plus-skills`, just rebranded —
-same infeasible-vetting-at-scale reasoning, not added).
+maintainer/project as the already-rejected `claude-code-plugins-plus-skills`, just rebranded — same
+infeasible-vetting-at-scale reasoning, not added), `davepoon/buildwithclaude` (3.4k★, single
+maintainer, indexes 20k+ community plugins with no independent per-entry vetting — same
+infeasible-vetting-at-scale reasoning despite the higher star count, not added).
 Note: the weekly routine's cloud sandbox is ephemeral, so none of these persist between runs; each
 run re-adds them from this list to inspect current listings (see "Weekly research routine" below).
 
@@ -112,7 +121,20 @@ from each other:
   directly, and one acts as orchestrator. **Experimental and disabled by default**
   (`CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1`), with documented rough edges around session
   resumption, task coordination, and shutdown. Not enabled anywhere; no current task identified
-  that needs full-instance teammates rather than subagent fan-out or the `Workflow` tool.
+  that needs full-instance teammates rather than subagent fan-out or the `Workflow` tool. Still not
+  GA as of 2026-09-12 (independently reconfirmed via web search — "research preview," experimental
+  flag still required).
+
+**Anthropic's own published taxonomy** (found 2026-09-12, see
+`research/2026-09-12-agent-architectures-multi-agent-patterns.md`) names five coordination
+patterns: Orchestrator-Subagent, Generator-Verifier, Agent Teams, Message Bus, and Shared State.
+The three tiers above map onto three of the five — Orchestrator-Subagent = the `Agent` tool (the
+recommended default, and already this account's primary pattern), Generator-Verifier = the
+`Workflow` tool's adversarial-verify idiom (available, still not exercised on a real task — see
+Testing/verification below), Agent Teams = the platform feature above. **Message Bus**
+(event-driven pipeline of pluggable agents) and **Shared State** (blackboard-style collaboration
+over literally shared mutable state) have no current analog or identified need in any tracked
+project — noted for completeness, not an action item.
 
 ## Testing / verification
 
@@ -251,10 +273,12 @@ learned from its first real run (2026-08-06), both now reflected in the spec:
   same "note, don't delete yet" logic.
 - **Still holding as of 2026-08-29** — fifth consecutive successful push, first try, no
   workaround.
-- **Still holding as of 2026-09-05** (this run) — sixth consecutive successful push, first try, no
+- **Still holding as of 2026-09-05** — sixth consecutive successful push, first try, no
   workaround. This note has now held for a full month across six runs; per the "note, don't delete
   yet" logic it'll keep being carried forward, but at this point a regression would be the
   surprising outcome, not the other way around.
+- **Still holding as of 2026-09-12** (this run) — seventh consecutive successful push, first try,
+  no workaround.
 
 ## Known gaps (as of this baseline)
 

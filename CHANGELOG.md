@@ -3,6 +3,29 @@
 Running index of changes actually implemented (not just researched/proposed). Newest first, each
 entry links to its full `decisions/` record.
 
+## 2026-09-12
+
+- **Eighth weekly research pass: agent architectures & multi-agent patterns deep-dive
+  (rotation's 2nd topic, revisited).** Found and added a new marketplace,
+  `anthropics/claude-plugins-community` — a first-party Anthropic-run *community* marketplace
+  (2,282 plugins, automated-security-scanned submissions) distinct from `claude-plugins-official`'s
+  curated listing; logged an explicit distinction that an official host doesn't waive the
+  per-plugin reputability bar, since the automated scan only checks for malicious code. No plugin
+  recommended from it this week — too large to vet in one pass; future scans will use narrow
+  topic-driven keyword searches against it instead of a full re-scan. Also evaluated and declined
+  `davepoon/buildwithclaude` (3.4k★ discovery site, same infeasible-vetting-at-scale shape as the
+  already-rejected `tonsofskills.com`) and six individual `claude-plugins-official` plugins
+  (`atomic-agents`, `agent-sdk-dev`, `pydantic-ai`, `forge-skills`, `ai-plugins`, `cwc-makers`), all
+  rejected on no-mapped-workflow or credential grounds. No plugin cleared the recommend bar. No new
+  token-efficiency technique found (checked Anthropic's Messages-API context-editing/memory-tool
+  features — real, but API-level for building custom agents, not applicable to how Claude Code
+  itself delegates work). Deep-dive was a confirming pass: Anthropic's own published five-pattern
+  coordination taxonomy (Orchestrator-Subagent, Generator-Verifier, Agent Teams, Message Bus, Shared
+  State) maps cleanly onto three of `baseline.md`'s existing tiers, with Message Bus/Shared State
+  noted as having no current analog or need. `baseline.md` updated in place for the marketplace
+  addition, the taxonomy mapping, and refreshed plugin counts. See
+  [`research/2026-09-12-agent-architectures-multi-agent-patterns.md`](research/2026-09-12-agent-architectures-multi-agent-patterns.md).
+
 ## 2026-09-05
 
 - **Seventh weekly research pass: MCP servers & integrations deep-dive (rotation restarts).** No
