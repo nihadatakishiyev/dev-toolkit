@@ -3,6 +3,22 @@
 Running index of changes actually implemented (not just researched/proposed). Newest first, each
 entry links to its full `decisions/` record.
 
+## 2026-09-19
+
+- **Ninth weekly research pass: prompting techniques deep-dive (rotation's 3rd topic,
+  revisited).** Confirming pass, consistent with the 2026-08-08 first-pass verdict — no
+  prompting-technique gap found. One new piece of vocabulary added to `baseline.md`: Anthropic's
+  published "loop engineering" framing (persistent instructions/skills/hooks driving an agent to
+  iterate autonomously until a completion condition holds), which turns out to describe this
+  repo's own weekly research routine, previously undocumented under that term. Bulk-evaluated 238
+  previously-unitemized `claude-plugins-official` plugins (marketplace grew 295 → 310) — none
+  recommended, same credential/no-mapped-workflow reasoning as prior passes; individually flagged
+  `supabase` (redundant with Compass's existing platform connector) and a handful of others.
+  Found and evaluated (not added) `AqueGen/model-routing`, a promising but too-new (3★, days old)
+  third-party model-tier-routing plugin. No plugin or token-efficiency technique cleared the
+  recommend bar this week — no `decisions/` entries drafted. See
+  [`research/2026-09-19-prompting-techniques.md`](research/2026-09-19-prompting-techniques.md).
+
 ## 2026-09-12
 
 - **Eighth weekly research pass: agent architectures & multi-agent patterns deep-dive

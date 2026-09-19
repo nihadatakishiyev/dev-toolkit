@@ -1,11 +1,10 @@
 # Current setup baseline
 
-Snapshot as of 2026-08-06, last updated 2026-09-12 (agent-architectures-&-multi-agent-patterns
-weekly pass — added the `claude-plugins-community` marketplace, mapped current agent-tooling tiers
-against Anthropic's own published five-pattern taxonomy, and refreshed marketplace plugin counts).
-Updated whenever a research pass finds it's gone stale, or an implemented change makes it
-inaccurate. This is what each weekly research pass diffs against — keep it factual and current, not
-aspirational.
+Snapshot as of 2026-08-06, last updated 2026-09-19 (prompting-techniques weekly pass — refreshed
+`claude-plugins-official`'s plugin count, bulk-evaluated its previously-unitemized long tail, and
+added the "loop engineering" named framing to Known gaps). Updated whenever a research pass finds
+it's gone stale, or an implemented change makes it inaccurate. This is what each weekly research
+pass diffs against — keep it factual and current, not aspirational.
 
 ## Skills
 
@@ -50,24 +49,31 @@ name and would need a corresponding update if so).
   (polish/audit/critique/harden/typeset/...), companion to `frontend-design`. Ships local-only
   `PostToolUse`/`Stop` hooks on Edit/Write (verified no network calls/exec before install).
 
-**Configured marketplaces:** `claude-plugins-official` (default, 295 plugins as of 2026-09-12, up
-from 291), `superpowers-dev` (github.com/obra/superpowers), `claude-code-workflows`
-(github.com/wshobson/agents, 94 plugins as of 2026-09-12, unchanged since 2026-09-05), `impeccable`
-(github.com/pbakaus/impeccable — added 2026-08-06, design-focused, single plugin), `thedotmack`
-(github.com/thedotmack/claude-mem — added 2026-08-08, 2 plugins as of 2026-09-12 —
+**Configured marketplaces:** `claude-plugins-official` (default, 310 plugins as of 2026-09-19, up
+from 295 — a full name-list diff against `skills-seen.md` this run found 238 previously-unitemized
+plugins beyond the net growth alone; bulk-evaluated by category (SaaS/credentialed integrations,
+cloud-provider suites, unused-language LSPs) with a handful individually itemized, none recommended,
+see `research/2026-09-19-prompting-techniques.md`), `superpowers-dev` (github.com/obra/superpowers),
+`claude-code-workflows` (github.com/wshobson/agents, 94 plugins, unchanged since 2026-09-05),
+`impeccable` (github.com/pbakaus/impeccable — added 2026-08-06, design-focused, single plugin),
+`thedotmack` (github.com/thedotmack/claude-mem — added 2026-08-08, 2 plugins —
 `claude-mem`/`claude-mem-cowork` — both rejected, see Known gaps), `claude-plugins-community`
 (`claude-community`, github.com/anthropics/claude-plugins-community — added 2026-09-12, first-party
 Anthropic-run **community** marketplace, distinct from `claude-plugins-official`: anyone submits a
-plugin, it passes automated security scanning, and it's synced in nightly — 2,282 plugins as of
-2026-09-12, far larger than anything else configured, and reputable only as a *host*; individual
-plugins there still need the same per-plugin reputability vetting as any third-party source, since
-passing an automated security scan is a materially weaker bar than "well-established/maintained,"
-see `research/2026-09-12-agent-architectures-multi-agent-patterns.md`). Also evaluated and declined:
+plugin, it passes automated security scanning, and it's synced in nightly — 2,282 plugins, unchanged
+since 2026-09-12 (first pass where this marketplace hasn't grown), far larger than anything else
+configured, and reputable only as a *host*; individual plugins there still need the same per-plugin
+reputability vetting as any third-party source, since passing an automated security scan is a
+materially weaker bar than "well-established/maintained," see
+`research/2026-09-12-agent-architectures-multi-agent-patterns.md`). Also evaluated and declined:
 `tonsofskills.com` (`jeremylongshore/tons-of-skills-marketplace`, 471 plugins/3,069 skills, same
 maintainer/project as the already-rejected `claude-code-plugins-plus-skills`, just rebranded — same
 infeasible-vetting-at-scale reasoning, not added), `davepoon/buildwithclaude` (3.4k★, single
 maintainer, indexes 20k+ community plugins with no independent per-entry vetting — same
-infeasible-vetting-at-scale reasoning despite the higher star count, not added).
+infeasible-vetting-at-scale reasoning despite the higher star count, not added), `AqueGen/model-routing`
+(2026-09-19 — pinned model-tier subagents + routing skill, directly on-topic for the Haiku-routing
+practice below, but only 3★ and days-old at evaluation time — too thin a track record, revisit if it
+matures).
 Note: the weekly routine's cloud sandbox is ephemeral, so none of these persist between runs; each
 run re-adds them from this list to inspect current listings (see "Weekly research routine" below).
 
@@ -148,9 +154,11 @@ rotation topics). Current state:
 - **`Workflow`-tool-level:** documented adversarial-verify and judge-panel idioms (independent
   skeptic subagents that try to refute a finding; multi-persona panels for ambiguous judgment
   calls) — available, **still not used on any real task** as of this baseline. This is now the
-  second consecutive deep-dive pass noting this same "documented, zero real-task usage" gap; see
-  `research/2026-08-22-testing-verification-approaches.md` for the explicit flag not to just let
-  this line get copy-pasted forward a third time without someone actually trying it.
+  third consecutive pass to note this same "documented, zero real-task usage" gap since it was
+  first flagged (2026-08-22 original, reinforced 2026-09-12 via the Generator-Verifier mapping,
+  reinforced again 2026-09-19) — genuinely due for a forced try next time a verification-shaped
+  task comes up rather than letting it ride a fourth time; see
+  `research/2026-08-22-testing-verification-approaches.md` for the original flag.
 - **Native `/goal` command** (Claude Code v2.1.139+, May 2026) — not previously documented here as
   a verification mechanism in its own right (baseline only mentioned it in passing as the reason
   `ralph-wiggum` was rejected). Declares a completion condition; after every turn, a separate fresh
@@ -277,8 +285,11 @@ learned from its first real run (2026-08-06), both now reflected in the spec:
   workaround. This note has now held for a full month across six runs; per the "note, don't delete
   yet" logic it'll keep being carried forward, but at this point a regression would be the
   surprising outcome, not the other way around.
-- **Still holding as of 2026-09-12** (this run) — seventh consecutive successful push, first try,
-  no workaround.
+- **Still holding as of 2026-09-12** — seventh consecutive successful push, first try, no
+  workaround.
+- **Still holding as of 2026-09-19** (this run) — eighth consecutive successful push, first try,
+  no workaround. This note is now carrying forward mostly as a formality; a regression would be
+  the surprising outcome.
 
 ## Known gaps (as of this baseline)
 
@@ -300,4 +311,13 @@ learned from its first real run (2026-08-06), both now reflected in the spec:
   meta-prompting/step-back decomposition) — a confirming pass, not a gap-closing one. One concrete,
   actionable finding came out of it (effort-level routing for `Workflow` agent dispatch,
   independent of the existing model-routing rule) but it's filed under token-efficiency, not here,
-  since it's a delegation-pattern lever rather than a prompt-wording one.
+  since it's a delegation-pattern lever rather than a prompt-wording one. **Revisited 2026-09-19**
+  (`research/2026-09-19-prompting-techniques.md`), same confirming verdict, plus one new piece of
+  vocabulary worth recording: Anthropic has publicly named **"loop engineering"** — persistent
+  instructions/skills/hooks that make an agent iterate autonomously (gather context → act → verify →
+  correct) until a defined completion condition holds, built from primitives already documented
+  separately here (`CLAUDE.md`, skills, hooks, the native `/goal` command, `/loop`/`/schedule`
+  routines). This weekly research routine *is* a loop-engineered system by this definition — the
+  term wasn't previously connected to it. Adjacent to, but distinct from, the still-unexercised
+  Generator-Verifier idiom below (iterate-until-done vs. produce-then-independently-check); no
+  behavior change indicated, just terminology worth citing next time this topic comes up.
