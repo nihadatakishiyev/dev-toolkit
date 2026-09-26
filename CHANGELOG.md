@@ -3,6 +3,25 @@
 Running index of changes actually implemented (not just researched/proposed). Newest first, each
 entry links to its full `decisions/` record.
 
+## 2026-09-26
+
+- **Tenth weekly research pass: memory systems deep-dive (rotation's 4th topic, revisited).**
+  Found and added to `baseline.md`: Claude Code now natively reads a repository's `AGENTS.md` as
+  project instructions (v2.1.277+, no import/symlink workaround needed), with a companion
+  `/import` command for pulling in another coding tool's config — the single substantive memory-
+  system change since the first 2026-08-15 pass. Reconfirmed (again) that "Dreaming"/memory
+  consolidation belongs to the separate Managed Agents API, not Claude Code's own auto memory —
+  search results keep conflating the two. Checked Anthropic's Context Editing API + Memory Tool
+  (Messages-API-level, not applicable to any tracked project). Individually evaluated five
+  genuinely new `claude-plugins-official` plugins (`duckdb-skills`, `gitkraken`, `expo`, `convex`,
+  `mlflow`, marketplace grew 310 → 314) — all rejected, no mapped workflow or requires a
+  credential. Found and evaluated (not added) `netresearch/claude-code-marketplace` — well-
+  maintained but 100% concentrated on a stack (TYPO3/PHP/Go/Docker/Jira) no tracked project uses;
+  notable for using the `agentskills.io`/`AGENTS.md` cross-tool portability standard, tying
+  directly to the `AGENTS.md` finding above. No plugin or token-efficiency technique cleared the
+  recommend bar this week — no `decisions/` entries drafted. See
+  [`research/2026-09-26-memory-systems.md`](research/2026-09-26-memory-systems.md).
+
 ## 2026-09-19
 
 - **Ninth weekly research pass: prompting techniques deep-dive (rotation's 3rd topic,

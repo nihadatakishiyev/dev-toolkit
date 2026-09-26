@@ -1,9 +1,9 @@
 # Current setup baseline
 
-Snapshot as of 2026-08-06, last updated 2026-09-19 (prompting-techniques weekly pass — refreshed
-`claude-plugins-official`'s plugin count, bulk-evaluated its previously-unitemized long tail, and
-added the "loop engineering" named framing to Known gaps). Updated whenever a research pass finds
-it's gone stale, or an implemented change makes it inaccurate. This is what each weekly research
+Snapshot as of 2026-08-06, last updated 2026-09-26 (memory-systems weekly pass — refreshed
+`claude-plugins-official`'s plugin count, added native `AGENTS.md` support to Global config, and
+extended the "Weekly research routine" push-confirmation streak). Updated whenever a research pass
+finds it's gone stale, or an implemented change makes it inaccurate. This is what each weekly research
 pass diffs against — keep it factual and current, not aspirational.
 
 ## Skills
@@ -49,11 +49,12 @@ name and would need a corresponding update if so).
   (polish/audit/critique/harden/typeset/...), companion to `frontend-design`. Ships local-only
   `PostToolUse`/`Stop` hooks on Edit/Write (verified no network calls/exec before install).
 
-**Configured marketplaces:** `claude-plugins-official` (default, 310 plugins as of 2026-09-19, up
-from 295 — a full name-list diff against `skills-seen.md` this run found 238 previously-unitemized
-plugins beyond the net growth alone; bulk-evaluated by category (SaaS/credentialed integrations,
-cloud-provider suites, unused-language LSPs) with a handful individually itemized, none recommended,
-see `research/2026-09-19-prompting-techniques.md`), `superpowers-dev` (github.com/obra/superpowers),
+**Configured marketplaces:** `claude-plugins-official` (default, 314 plugins as of 2026-09-26, up
+from 310 — a handful of the growth individually itemized (`duckdb-skills`, `gitkraken`, `expo`,
+`convex`, `mlflow`, `postman`, all rejected), the rest folding into the same established
+bulk-reject categories (SaaS/credentialed integrations, cloud-provider suites, unused-language/
+framework tooling) as the 2026-08-08/2026-08-29/2026-09-19 passes, see
+`research/2026-09-26-memory-systems.md`), `superpowers-dev` (github.com/obra/superpowers),
 `claude-code-workflows` (github.com/wshobson/agents, 94 plugins, unchanged since 2026-09-05),
 `impeccable` (github.com/pbakaus/impeccable — added 2026-08-06, design-focused, single plugin),
 `thedotmack` (github.com/thedotmack/claude-mem — added 2026-08-08, 2 plugins —
@@ -73,7 +74,10 @@ maintainer, indexes 20k+ community plugins with no independent per-entry vetting
 infeasible-vetting-at-scale reasoning despite the higher star count, not added), `AqueGen/model-routing`
 (2026-09-19 — pinned model-tier subagents + routing skill, directly on-topic for the Haiku-routing
 practice below, but only 3★ and days-old at evaluation time — too thin a track record, revisit if it
-matures).
+matures), `netresearch/claude-code-marketplace` (2026-09-26 — well-maintained, company-backed
+(Netresearch DTT GmbH), 61★/14 forks/366 commits, but all 39 skills concentrate on TYPO3/PHP/Go/
+Docker/Jira, a stack no tracked project uses — not added; notable for using the cross-tool
+`agentskills.io`/`AGENTS.md` portability standard, see this week's memory-systems deep-dive).
 Note: the weekly routine's cloud sandbox is ephemeral, so none of these persist between runs; each
 run re-adds them from this list to inspect current listings (see "Weekly research routine" below).
 
@@ -230,6 +234,18 @@ legacy long-lived-SSE patterns.
   Found 2026-08-15; not yet used anywhere. See
   `decisions/2026-08-15-token-efficiency-path-scoped-rules.md` for the drafted recommendation (not
   yet applied) on when to use this for `~/.claude/CLAUDE.md` itself as it grows.
+- **`AGENTS.md` native support** (Claude Code v2.1.277+, found 2026-09-26 during the memory-systems
+  deep-dive's revisit — not in the original 2026-08-15 pass) — Claude Code can now read a
+  repository's `AGENTS.md` directly as project instructions (build/test commands, conventions) when
+  no `CLAUDE.md`/`CLAUDE.local.md` exists on the path, no import/symlink workaround required; a
+  `/config` → "Project instructions" setting controls whether `CLAUDE.md`/`AGENTS.md` are read
+  together, separately, or not at all. A companion `/import` command (v2.1.213+) one-time-copies
+  another coding tool's config (Cursor rules, `.github/copilot-instructions.md`, etc.) into the
+  matching `CLAUDE.md`. **Not currently actionable**: no project tracked here uses `AGENTS.md` or
+  another AI coding tool alongside Claude Code, so there's no concrete driver to adopt it yet —
+  worth revisiting if a tracked project ever needs instructions portable across multiple AI coding
+  tools (this is the same portability angle `netresearch/claude-code-marketplace`'s skills lean on —
+  see `research/2026-09-26-memory-systems.md`).
 
 ## Browser E2E testing
 
@@ -287,9 +303,11 @@ learned from its first real run (2026-08-06), both now reflected in the spec:
   surprising outcome, not the other way around.
 - **Still holding as of 2026-09-12** — seventh consecutive successful push, first try, no
   workaround.
-- **Still holding as of 2026-09-19** (this run) — eighth consecutive successful push, first try,
-  no workaround. This note is now carrying forward mostly as a formality; a regression would be
+- **Still holding as of 2026-09-19** — eighth consecutive successful push, first try, no
+  workaround. This note is now carrying forward mostly as a formality; a regression would be
   the surprising outcome.
+- **Still holding as of 2026-09-26** (this run) — ninth consecutive successful push, first try, no
+  workaround.
 
 ## Known gaps (as of this baseline)
 
