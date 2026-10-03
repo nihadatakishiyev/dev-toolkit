@@ -3,6 +3,26 @@
 Running index of changes actually implemented (not just researched/proposed). Newest first, each
 entry links to its full `decisions/` record.
 
+## 2026-10-03
+
+- **Eleventh weekly research pass: testing/verification deep-dive (rotation's 5th topic,
+  revisited).** Substantive finding: **`claude plugin eval`** (Claude Code v2.1.269+, confirmed
+  live in this session's v2.1.288) — a native command for scoring a plugin's own behavior against
+  an `evals/` directory of prompt+grader cases, with-arm-vs-without-arm delta scoring, six grader
+  types, and CI gating flags. Added to `baseline.md`'s Testing/verification section; not yet applied
+  to a real scan, but directly relevant to this routine's own skills-scan job (an actual measured
+  signal instead of star-count/maintainer-reputation guessing for borderline plugin candidates).
+  Also noted: the `Workflow` tool's adversarial-verify/judge-panel idioms are now on their fourth
+  consecutive mention as "documented, zero real-task usage" — flagged as overdue for a manual-review
+  pass to actually exercise, not just re-noted again next rotation. Skills scan: `claude-plugins-
+  official` grew 314 → 315 (net), chipped away at the long-standing unitemized bulk tail (8 names
+  individually evaluated, ~204 bulk-rejected); found and evaluated (not added)
+  `ComposioHQ/awesome-claude-plugins` (reputable but every plugin redundant/credential-gated) and
+  `alirezarezvani/claude-skills` (27.3k★ — highest star count seen yet, but same
+  infeasible-vetting-at-scale verdict as `davepoon/buildwithclaude`). No plugin or token-efficiency
+  technique cleared the recommend bar this week — no `decisions/` entries drafted. See
+  [`research/2026-10-03-testing-verification-approaches.md`](research/2026-10-03-testing-verification-approaches.md).
+
 ## 2026-09-26
 
 - **Tenth weekly research pass: memory systems deep-dive (rotation's 4th topic, revisited).**

@@ -1,10 +1,10 @@
 # Current setup baseline
 
-Snapshot as of 2026-08-06, last updated 2026-09-26 (memory-systems weekly pass — refreshed
-`claude-plugins-official`'s plugin count, added native `AGENTS.md` support to Global config, and
-extended the "Weekly research routine" push-confirmation streak). Updated whenever a research pass
-finds it's gone stale, or an implemented change makes it inaccurate. This is what each weekly research
-pass diffs against — keep it factual and current, not aspirational.
+Snapshot as of 2026-08-06, last updated 2026-10-03 (testing/verification weekly pass — added
+`claude plugin eval` to Testing/verification, refreshed `claude-plugins-official`/`claude-community`
+plugin counts, extended the "Weekly research routine" push-confirmation streak). Updated whenever a
+research pass finds it's gone stale, or an implemented change makes it inaccurate. This is what each
+weekly research pass diffs against — keep it factual and current, not aspirational.
 
 ## Skills
 
@@ -49,20 +49,22 @@ name and would need a corresponding update if so).
   (polish/audit/critique/harden/typeset/...), companion to `frontend-design`. Ships local-only
   `PostToolUse`/`Stop` hooks on Edit/Write (verified no network calls/exec before install).
 
-**Configured marketplaces:** `claude-plugins-official` (default, 314 plugins as of 2026-09-26, up
-from 310 — a handful of the growth individually itemized (`duckdb-skills`, `gitkraken`, `expo`,
-`convex`, `mlflow`, `postman`, all rejected), the rest folding into the same established
-bulk-reject categories (SaaS/credentialed integrations, cloud-provider suites, unused-language/
-framework tooling) as the 2026-08-08/2026-08-29/2026-09-19 passes, see
-`research/2026-09-26-memory-systems.md`), `superpowers-dev` (github.com/obra/superpowers),
-`claude-code-workflows` (github.com/wshobson/agents, 94 plugins, unchanged since 2026-09-05),
-`impeccable` (github.com/pbakaus/impeccable — added 2026-08-06, design-focused, single plugin),
-`thedotmack` (github.com/thedotmack/claude-mem — added 2026-08-08, 2 plugins —
-`claude-mem`/`claude-mem-cowork` — both rejected, see Known gaps), `claude-plugins-community`
+**Configured marketplaces:** `claude-plugins-official` (default, 315 plugins as of 2026-10-03, up
+from 314 — true net growth is +1, but this pass's full-name diff against everything previously
+recorded in `skills-seen.md` found 212 names never individually itemized before, mostly the
+long-standing unlisted bulk tail finally getting spot-named in pieces rather than actual new growth
+— 8 named individually this run, rest bulk-rejected under the same established categories
+(SaaS/credentialed integrations, cloud-provider suites, unused-language/framework tooling) as the
+2026-08-08/2026-08-29/2026-09-19 passes, see
+`research/2026-10-03-testing-verification-approaches.md`), `superpowers-dev`
+(github.com/obra/superpowers), `claude-code-workflows` (github.com/wshobson/agents, 94 plugins,
+unchanged since 2026-09-05), `impeccable` (github.com/pbakaus/impeccable — added 2026-08-06,
+design-focused, single plugin), `thedotmack` (github.com/thedotmack/claude-mem — added 2026-08-08,
+2 plugins — `claude-mem`/`claude-mem-cowork` — both rejected, see Known gaps), `claude-plugins-community`
 (`claude-community`, github.com/anthropics/claude-plugins-community — added 2026-09-12, first-party
 Anthropic-run **community** marketplace, distinct from `claude-plugins-official`: anyone submits a
-plugin, it passes automated security scanning, and it's synced in nightly — 2,282 plugins, unchanged
-since 2026-09-12 (first pass where this marketplace hasn't grown), far larger than anything else
+plugin, it passes automated security scanning, and it's synced in nightly — 2,283 plugins as of
+2026-10-03, up from 2,282 (second pass it's grown at all), far larger than anything else
 configured, and reputable only as a *host*; individual plugins there still need the same per-plugin
 reputability vetting as any third-party source, since passing an automated security scan is a
 materially weaker bar than "well-established/maintained," see
@@ -77,7 +79,14 @@ practice below, but only 3★ and days-old at evaluation time — too thin a tra
 matures), `netresearch/claude-code-marketplace` (2026-09-26 — well-maintained, company-backed
 (Netresearch DTT GmbH), 61★/14 forks/366 commits, but all 39 skills concentrate on TYPO3/PHP/Go/
 Docker/Jira, a stack no tracked project uses — not added; notable for using the cross-tool
-`agentskills.io`/`AGENTS.md` portability standard, see this week's memory-systems deep-dive).
+`agentskills.io`/`AGENTS.md` portability standard, see the 2026-09-26 memory-systems deep-dive),
+`ComposioHQ/awesome-claude-plugins` (2026-10-03 — 1.9k★, Composio-backed, but every one of its 24
+plugins duplicates already-installed/bundled capability or fails the credential/mapped-workflow
+bar, same "strict subset" verdict as the 2026-08-06 `anthropics/claude-code` marketplace),
+`alirezarezvani/claude-skills` (2026-10-03 — 27.3k★, the highest star count evaluated to date, but
+380+ skills from a single maintainer with no independent per-entry vetting — same
+infeasible-vetting-at-scale reasoning as `davepoon/buildwithclaude`, higher star count
+notwithstanding).
 Note: the weekly routine's cloud sandbox is ephemeral, so none of these persist between runs; each
 run re-adds them from this list to inspect current listings (see "Weekly research routine" below).
 
@@ -175,6 +184,20 @@ rotation topics). Current state:
 - **Bundled skills:** `review`, `security-review` cover code-review-shaped verification; no
   dedicated eval/benchmark framework installed (`deepeval`, `codspeed` both evaluated and rejected
   — see `skills-seen.md` — no project currently runs an eval harness against a shipped AI feature).
+- **`claude plugin eval`** (Claude Code v2.1.269+, found 2026-10-03 — confirmed live in this
+  session's v2.1.288) — a native command for testing a *plugin's* own behavior, not application
+  code: cases live under a plugin's `evals/` directory (a prompt + one or more graders); six grader
+  types ship (four free, computed from the transcript/filesystem: `regex`, `tool_used`,
+  `tool_order`, `file_exists`; two billable: `llm` judge, `baseline` judge); each case runs multiple
+  times with the plugin loaded and multiple times without, and the gap between the two arms is the
+  score; `claude plugin eval init` can scaffold cases for a plugin that doesn't have any yet;
+  `--threshold`/`--max-cost-usd` flags support CI gating. Directly relevant to this repo's own
+  weekly skills-scan: for a candidate plugin that ships (or could be made to ship) an eval suite,
+  this gives an actual measured pass/fail/score signal instead of the reputation-based judgment
+  (stars, maintainer track record, hook-script reading) the scan otherwise relies on exclusively.
+  Not yet used in a real scan — see `research/2026-10-03-testing-verification-approaches.md`'s
+  candidate-improvements table for where it'd apply first (the "immature, revisit later" plugins:
+  `superself`, `AqueGen/model-routing`, `hol-guard`).
 
 ## MCP servers / integrations
 
@@ -306,7 +329,9 @@ learned from its first real run (2026-08-06), both now reflected in the spec:
 - **Still holding as of 2026-09-19** — eighth consecutive successful push, first try, no
   workaround. This note is now carrying forward mostly as a formality; a regression would be
   the surprising outcome.
-- **Still holding as of 2026-09-26** (this run) — ninth consecutive successful push, first try, no
+- **Still holding as of 2026-09-26** — ninth consecutive successful push, first try, no
+  workaround.
+- **Still holding as of 2026-10-03** (this run) — tenth consecutive successful push, first try, no
   workaround.
 
 ## Known gaps (as of this baseline)
