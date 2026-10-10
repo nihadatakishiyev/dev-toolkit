@@ -3,6 +3,28 @@
 Running index of changes actually implemented (not just researched/proposed). Newest first, each
 entry links to its full `decisions/` record.
 
+## 2026-10-10
+
+- **Twelfth weekly research pass: tooling/infrastructure/automation deep-dive (rotation's 6th
+  topic, completing one full lap — MCP servers next week).** Skills scan was genuinely quiet: both
+  large first-party marketplaces (`claude-plugins-official` at 315, `claude-code-workflows` at 94)
+  showed zero net growth, `claude-community` grew by only +1 (too marginal to isolate by name);
+  no new marketplace found via web search; no plugin recommended. Found three new Claude Code
+  mechanisms from this week's v2.1.287–v2.1.294 release burst: **Claude Mods** (in-process,
+  unsandboxed plugin handlers distinct from skills/hooks/MCP — added to `baseline.md`, no current
+  use case), a native **`effort` parameter on the plain `Agent` tool** (corrects a stale claim in
+  `decisions/2026-08-08-token-efficiency-effort-routing.md` that it didn't exist — the tool's own
+  built-in restriction to explicit-ask-only is already the right boundary, no further action
+  needed), and the opt-in **"You Should Know"** side-agent (requires enabling telemetry — logged as
+  a research candidate for manual review, not drafted as a recommendation). **Recommended** (not
+  yet applied): a narrow boundary clause on the existing Haiku-routing token-efficiency bullet —
+  Claude Haiku 5.5 (now the Anthropic API's default Haiku model) carries a 5x price multiplier past
+  100K prompt tokens, which can silently erase the routing bullet's cost rationale for a
+  large-prompt dispatch. See
+  [`research/2026-10-10-tooling-infrastructure-automation.md`](research/2026-10-10-tooling-infrastructure-automation.md)
+  and
+  [`decisions/2026-10-10-token-efficiency-haiku-pricing-cliff.md`](decisions/2026-10-10-token-efficiency-haiku-pricing-cliff.md).
+
 ## 2026-10-03
 
 - **Eleventh weekly research pass: testing/verification deep-dive (rotation's 5th topic,

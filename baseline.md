@@ -1,10 +1,11 @@
 # Current setup baseline
 
-Snapshot as of 2026-08-06, last updated 2026-10-03 (testing/verification weekly pass — added
-`claude plugin eval` to Testing/verification, refreshed `claude-plugins-official`/`claude-community`
-plugin counts, extended the "Weekly research routine" push-confirmation streak). Updated whenever a
-research pass finds it's gone stale, or an implemented change makes it inaccurate. This is what each
-weekly research pass diffs against — keep it factual and current, not aspirational.
+Snapshot as of 2026-08-06, last updated 2026-10-10 (tooling/infrastructure/automation weekly pass —
+corrected a stale "`Agent` tool has no `effort` parameter" claim now that it does, added Claude
+Mods as a new extensibility mechanism, noted the Haiku 5.5 pricing cliff, extended the "Weekly
+research routine" push-confirmation streak). Updated whenever a research pass finds it's gone
+stale, or an implemented change makes it inaccurate. This is what each weekly research pass diffs
+against — keep it factual and current, not aspirational.
 
 ## Skills
 
@@ -49,25 +50,19 @@ name and would need a corresponding update if so).
   (polish/audit/critique/harden/typeset/...), companion to `frontend-design`. Ships local-only
   `PostToolUse`/`Stop` hooks on Edit/Write (verified no network calls/exec before install).
 
-**Configured marketplaces:** `claude-plugins-official` (default, 315 plugins as of 2026-10-03, up
-from 314 — true net growth is +1, but this pass's full-name diff against everything previously
-recorded in `skills-seen.md` found 212 names never individually itemized before, mostly the
-long-standing unlisted bulk tail finally getting spot-named in pieces rather than actual new growth
-— 8 named individually this run, rest bulk-rejected under the same established categories
-(SaaS/credentialed integrations, cloud-provider suites, unused-language/framework tooling) as the
-2026-08-08/2026-08-29/2026-09-19 passes, see
-`research/2026-10-03-testing-verification-approaches.md`), `superpowers-dev`
+**Configured marketplaces:** `claude-plugins-official` (default, 315 plugins as of 2026-10-10,
+unchanged since 2026-10-03), `superpowers-dev`
 (github.com/obra/superpowers), `claude-code-workflows` (github.com/wshobson/agents, 94 plugins,
 unchanged since 2026-09-05), `impeccable` (github.com/pbakaus/impeccable — added 2026-08-06,
 design-focused, single plugin), `thedotmack` (github.com/thedotmack/claude-mem — added 2026-08-08,
 2 plugins — `claude-mem`/`claude-mem-cowork` — both rejected, see Known gaps), `claude-plugins-community`
 (`claude-community`, github.com/anthropics/claude-plugins-community — added 2026-09-12, first-party
 Anthropic-run **community** marketplace, distinct from `claude-plugins-official`: anyone submits a
-plugin, it passes automated security scanning, and it's synced in nightly — 2,283 plugins as of
-2026-10-03, up from 2,282 (second pass it's grown at all), far larger than anything else
-configured, and reputable only as a *host*; individual plugins there still need the same per-plugin
-reputability vetting as any third-party source, since passing an automated security scan is a
-materially weaker bar than "well-established/maintained," see
+plugin, it passes automated security scanning, and it's synced in nightly — 2,284 plugins as of
+2026-10-10, up from 2,283 (third consecutive pass it's grown, each time by just +1), far larger than
+anything else configured, and reputable only as a *host*; individual plugins there still need the
+same per-plugin reputability vetting as any third-party source, since passing an automated security
+scan is a materially weaker bar than "well-established/maintained," see
 `research/2026-09-12-agent-architectures-multi-agent-patterns.md`). Also evaluated and declined:
 `tonsofskills.com` (`jeremylongshore/tons-of-skills-marketplace`, 471 plugins/3,069 skills, same
 maintainer/project as the already-rejected `claude-code-plugins-plus-skills`, just rebranded — same
@@ -130,7 +125,15 @@ from each other:
   genuinely needs prior context; worse than one for independent/adversarial verification or when
   the parent conversation is mostly irrelevant bulk. See
   `decisions/2026-09-05-token-efficiency-fork-subagent.md` (drafted recommendation, not yet applied
-  to `~/.claude/CLAUDE.md`).
+  to `~/.claude/CLAUDE.md`). **Correction (2026-10-10):** the plain `Agent` tool now also exposes
+  an `effort` parameter (Claude Code v2.1.292, 2026-10-06), contradicting
+  `decisions/2026-08-08-token-efficiency-effort-routing.md`'s claim at the time ("the plain `Agent`
+  tool has no `effort` parameter to set") — that claim is now stale, kept in that file as history
+  rather than edited. The tool's own built-in description restricts the new parameter to "only
+  when the user, or instructions such as CLAUDE.md or a skill, explicitly ask... never on your own
+  judgment," a stricter boundary than the Workflow-tool `effort` recommendation — no CLAUDE.md
+  change recommended here, the native guardrail is already correct. See
+  `research/2026-10-10-tooling-infrastructure-automation.md`.
 - **`Workflow` tool** — deterministic multi-agent orchestration expressed as a script
   (`pipeline()`/`parallel()` primitives, phases, schema-validated structured output). Documented
   idioms include adversarial-verify and judge-panel patterns. Available in this account's sessions;
@@ -269,6 +272,22 @@ legacy long-lived-SSE patterns.
   worth revisiting if a tracked project ever needs instructions portable across multiple AI coding
   tools (this is the same portability angle `netresearch/claude-code-marketplace`'s skills lean on —
   see `research/2026-09-26-memory-systems.md`).
+- **Claude Mods** (Claude Code v2.1.287, 2026-10-01, on by default — found 2026-10-10, see
+  `research/2026-10-10-tooling-infrastructure-automation.md`) — a new plugin type distinct from
+  skills/hooks/MCP servers: JS/TS handlers that run *inside* the Claude Code process and can
+  observe, rewrite, or replace internal events (tool calls, prompts) or alter the UI. Run with the
+  installing user's own permissions, not sandboxed — a different trust model from everything else
+  in this inventory. The bundled `plugin-authoring` skill (already in this account's available-
+  skills listing) covers building/debugging them, confirming this is live, not a future feature.
+  **Not currently actionable**: no tracked project has an identified use case for one yet.
+- **Claude Haiku 5.5** (shipped with Claude Code v2.1.293, 2026-10-07, now the default Haiku model
+  on the Anthropic API — found 2026-10-10) — natively 1M-context, first Haiku model with its own
+  effort control (starts at `medium` in Claude Code). Relevant to the existing Haiku-routing
+  token-efficiency bullet: it carries a 5x per-token price multiplier past 100K tokens of prompt,
+  which can silently erase the routing bullet's cost rationale for a large-prompt dispatch (e.g.
+  `fork`-mode carrying a long parent conversation). See
+  `decisions/2026-10-10-token-efficiency-haiku-pricing-cliff.md` (drafted recommendation, not yet
+  applied).
 
 ## Browser E2E testing
 
@@ -331,8 +350,10 @@ learned from its first real run (2026-08-06), both now reflected in the spec:
   the surprising outcome.
 - **Still holding as of 2026-09-26** — ninth consecutive successful push, first try, no
   workaround.
-- **Still holding as of 2026-10-03** (this run) — tenth consecutive successful push, first try, no
+- **Still holding as of 2026-10-03** — tenth consecutive successful push, first try, no
   workaround.
+- **Still holding as of 2026-10-10** (this run) — eleventh consecutive successful push, first try,
+  no workaround.
 
 ## Known gaps (as of this baseline)
 
