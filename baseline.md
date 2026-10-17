@@ -1,11 +1,10 @@
 # Current setup baseline
 
-Snapshot as of 2026-08-06, last updated 2026-10-10 (tooling/infrastructure/automation weekly pass —
-corrected a stale "`Agent` tool has no `effort` parameter" claim now that it does, added Claude
-Mods as a new extensibility mechanism, noted the Haiku 5.5 pricing cliff, extended the "Weekly
-research routine" push-confirmation streak). Updated whenever a research pass finds it's gone
-stale, or an implemented change makes it inaccurate. This is what each weekly research pass diffs
-against — keep it factual and current, not aspirational.
+Snapshot as of 2026-08-06, last updated 2026-10-17 (MCP servers & integrations weekly pass —
+corrected a stale connector-status list, documented three distinct skill/plugin catalogs, extended
+the "Weekly research routine" push-confirmation streak). Updated whenever a research pass finds
+it's gone stale, or an implemented change makes it inaccurate. This is what each weekly research
+pass diffs against — keep it factual and current, not aspirational.
 
 ## Skills
 
@@ -208,13 +207,19 @@ Three distinct mechanisms identified so far (last two both added to this doc 202
 `research/2026-09-05-mcp-servers-integrations.md`):
 
 - **Platform connector system** (claude.ai account-level), not local `.mcp.json` — no such file
-  exists in any project checked so far. Currently connected: Supabase, Wallet (BudgetBakers),
-  Gmail, Google Calendar, Google Drive. Adding a new one requires the user to connect it via the
-  claude.ai UI, not something installable from a session directly. A native `SearchMcpRegistry`
-  tool can search this same account-level directory by keyword from within a session (returns
-  install state, sample tools, whether enabled in the current chat) — it doesn't connect anything
-  itself, but lets a session proactively surface a specific real connector by name instead of only
-  reacting once a user names one.
+  exists in any project checked so far. **Corrected 2026-10-17** (previously said "Currently
+  connected: Supabase, Wallet (BudgetBakers), Gmail, Google Calendar, Google Drive" — stale):
+  calling the native `ListConnectors` tool directly (ground truth, not inference) shows `Supabase`,
+  `Wallet`, and `Gmail` connected; `Google Calendar` and `Google Drive` currently **not** connected
+  (contradicting the prior note); plus two connectors not previously documented at all — `Compassfi`
+  (connected, presumably Compass's own project connector) and `Scalable Capital`
+  (`connect_incomplete` — auth started but not finished). Adding/finishing a connection requires the
+  user via the claude.ai UI, not something installable from a session directly. A native
+  `SearchMcpRegistry` tool can search this same account-level directory by keyword from within a
+  session (returns install state, sample tools, whether enabled in the current chat) — it doesn't
+  connect anything itself, but lets a session proactively surface a specific real connector by name
+  instead of only reacting once a user names one; a companion `SuggestConnectors` tool resolves full
+  connector details for specific directory UUIDs returned by a `SearchMcpRegistry` search.
 - **Project-scoped `.mcp.json`** — a different, also-available mechanism; not currently used
   anywhere.
 - **Session/environment-level MCP tools** — pre-configured for a specific session by the execution
@@ -222,6 +227,24 @@ Three distinct mechanisms identified so far (last two both added to this doc 202
   cloud session is an example: it gets repo-scoped `mcp__github__*` tools supplied directly by the
   remote execution environment, distinct from both mechanisms above (scoped to which repos that
   particular session was granted, not an account-wide toggle or a file in the repo).
+
+**Three distinct skill/plugin catalogs, not one** (found 2026-10-17, see
+`research/2026-10-17-mcp-servers-integrations.md`) — relevant here because two of the three are
+queried the same way as the connector directory above, via native account-level tools:
+1. **Claude Code CLI plugin marketplaces** (`claude plugin marketplace`/`claude plugin install`) —
+   self-managed, local to a persistent environment; this is the system `skills-seen.md` has been
+   tracking all along (`superpowers`, `playwright`, etc.).
+2. **claude.ai's own account-level plugin catalog** (native `ListPlugins`/`SearchPlugins`/
+   `SuggestPluginInstall` tools) — a separate install path with no visibility into, or from, the CLI
+   marketplace system above. Currently **empty/unused** for this account (`ListPlugins` returns zero
+   results).
+3. **claude.ai's personal Skills library** (native `ListSkills`/`SearchSkills`/`SuggestSkills`
+   tools) — overlaps partially with, but is narrower than, a Claude Code session's full
+   available-skills listing: it returned 14 entries (`unslop`, `docs`, `google-workspace`,
+   `computer-use`, `chrome-browser`, `built-in-browser`, `deep-research`, `import-memory`, `morning`,
+   `skill-creator`, `xlsx`, `pptx`, `pdf`, `docx`), excluding every Claude-Code-specific bundled
+   skill (`dataviz`, `update-config`, `code-review`, `simplify`, `loop`, `run`, `init`,
+   `security-review`, etc.) — those come from the Claude Code harness itself, not this catalog.
 
 Also noted 2026-09-05: the MCP protocol itself had a substantial spec revision (2026-07-28) —
 `sampling`/`roots`/SSE-based logging deprecated in favor of a multi-round-trip elicitation
@@ -352,7 +375,9 @@ learned from its first real run (2026-08-06), both now reflected in the spec:
   workaround.
 - **Still holding as of 2026-10-03** — tenth consecutive successful push, first try, no
   workaround.
-- **Still holding as of 2026-10-10** (this run) — eleventh consecutive successful push, first try,
+- **Still holding as of 2026-10-10** — eleventh consecutive successful push, first try, no
+  workaround.
+- **Still holding as of 2026-10-17** (this run) — twelfth consecutive successful push, first try,
   no workaround.
 
 ## Known gaps (as of this baseline)

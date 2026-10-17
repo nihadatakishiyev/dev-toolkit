@@ -3,6 +3,26 @@
 Running index of changes actually implemented (not just researched/proposed). Newest first, each
 entry links to its full `decisions/` record.
 
+## 2026-10-17
+
+- **Thirteenth weekly research pass: MCP servers & integrations deep-dive (rotation's 1st topic,
+  starting lap 3).** Skills scan was quiet again — both large first-party marketplaces
+  (`claude-plugins-official` at 315, `claude-code-workflows` at 94) showed zero net growth;
+  `claude-community` **shrank** 2284 → 2283, its first observed drop since being added
+  2026-09-12; no new marketplace found; no plugin recommended. Token-efficiency check found nothing
+  new clearing the quality bar — confirming pass. The substantive finding was for `baseline.md`
+  itself: calling the native `ListConnectors` tool directly (ground truth, not inference) found the
+  documented connector list was stale — `Google Calendar`/`Google Drive` are currently
+  **not connected** (baseline said they were), and two connectors weren't documented at all
+  (`Compassfi`, connected; `Scalable Capital`, auth incomplete) — corrected in place. Also
+  documented, for the first time, that there are **three distinct skill/plugin catalogs** rather
+  than one: Claude Code's own CLI plugin-marketplace system (what this routine has always tracked),
+  a separate claude.ai account-level plugin catalog (currently empty/unused, queried via native
+  `ListPlugins`/`SearchPlugins` tools), and claude.ai's personal Skills library (queried via
+  `ListSkills`/`SearchSkills`, a narrower subset that excludes every Claude-Code-specific bundled
+  skill). See
+  [`research/2026-10-17-mcp-servers-integrations.md`](research/2026-10-17-mcp-servers-integrations.md).
+
 ## 2026-10-10
 
 - **Twelfth weekly research pass: tooling/infrastructure/automation deep-dive (rotation's 6th
