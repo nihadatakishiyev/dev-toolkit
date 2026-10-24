@@ -3,6 +3,27 @@
 Running index of changes actually implemented (not just researched/proposed). Newest first, each
 entry links to its full `decisions/` record.
 
+## 2026-10-24
+
+- **Fourteenth weekly research pass: agent architectures & multi-agent patterns deep-dive
+  (rotation's 2nd topic, lap 3).** Biggest finding was structural, not a plugin: the built-in
+  plugin marketplace has been renamed `claude-plugins-official` → `anthropic-plugin-directory`
+  ("Built in (Anthropic Directory)") and grown from 315 to **3,598** plugins — corroborated by a
+  claude.ai support article describing a unified skills/connectors/plugins directory and by Claude
+  Code's own changelog describing plugins/skills now syncing from claude.ai into Claude Code
+  sessions. Spot-checks confirm it now hosts arbitrary third-party repos, not just
+  Anthropic-authored plugins, so it needs the same per-plugin vetting as `claude-community` going
+  forward — `baseline.md` corrected (not yet independently reconfirmed from a persistent
+  environment). Three individually-evaluated plugins from it rejected (`agentic-council`,
+  `agent-protocols`, `skills-for-real-engineers`) — none cleared the bar. Deep-dive: changelog
+  mining (not third-party blogs) reconfirms Agent Teams is still experimental, not GA, with active
+  bug-fix activity through October; noted `subagent_type: "fork"` is now default-on more broadly
+  (desktop app, VS Code, Agent SDK, `claude -p`, not just the terminal); flagged the `Workflow`
+  tool's Generator-Verifier/judge-panel idiom as now five consecutive passes of "documented, zero
+  real-task usage." Token-efficiency check: no new technique cleared the quality bar — confirming
+  pass. See
+  [`research/2026-10-24-agent-architectures-multi-agent-patterns.md`](research/2026-10-24-agent-architectures-multi-agent-patterns.md).
+
 ## 2026-10-17
 
 - **Thirteenth weekly research pass: MCP servers & integrations deep-dive (rotation's 1st topic,

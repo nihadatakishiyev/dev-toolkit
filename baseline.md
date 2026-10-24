@@ -1,8 +1,9 @@
 # Current setup baseline
 
-Snapshot as of 2026-08-06, last updated 2026-10-17 (MCP servers & integrations weekly pass —
-corrected a stale connector-status list, documented three distinct skill/plugin catalogs, extended
-the "Weekly research routine" push-confirmation streak). Updated whenever a research pass finds
+Snapshot as of 2026-08-06, last updated 2026-10-24 (agent architectures & multi-agent patterns
+weekly pass — corrected the built-in plugin marketplace's name/scale/trust-model after it was
+renamed and grew ~11x, noted `fork` subagent mode's broader default-on reach, extended the
+"Weekly research routine" push-confirmation streak). Updated whenever a research pass finds
 it's gone stale, or an implemented change makes it inaccurate. This is what each weekly research
 pass diffs against — keep it factual and current, not aspirational.
 
@@ -49,8 +50,25 @@ name and would need a corresponding update if so).
   (polish/audit/critique/harden/typeset/...), companion to `frontend-design`. Ships local-only
   `PostToolUse`/`Stop` hooks on Edit/Write (verified no network calls/exec before install).
 
-**Configured marketplaces:** `claude-plugins-official` (default, 315 plugins as of 2026-10-10,
-unchanged since 2026-10-03), `superpowers-dev`
+**Configured marketplaces:** **Corrected 2026-10-24** — the built-in default marketplace is no
+longer `claude-plugins-official` by that name. `claude plugin marketplace list` now shows only
+`anthropic-plugin-directory` ("Built in (Anthropic Directory)") as the built-in entry, and `claude
+plugin list --available --json` shows it carrying **3,598 plugins**, up ~11x from 315 as recently
+as 2026-10-17. Corroborated by two first-party sources: a claude.ai support article describing a
+single unified skills/connectors/plugins directory on claude.ai, and Claude Code's own changelog
+(v2.1.299/2.1.304/2.1.309, Oct 14–22 2026) describing plugins/skills now syncing from claude.ai
+into Claude Code sessions (including Cowork cloud sessions — this routine's own context) as
+"claude.ai Directory plugin"/"account plugin." This plausibly collapses two of the three catalogs
+documented 2026-10-17 (the previously-empty account-level plugin catalog and the previously
+14-entry personal Skills library) into this one CLI-visible marketplace. **Trust-model
+consequence:** spot-checked entries (`agentic-council`, `agent-protocols`,
+`skills-for-real-engineers`) resolve to arbitrary third-party GitHub repos, not Anthropic-authored
+plugins — so this marketplace now needs the same per-plugin vetting discipline as `claude-community`,
+not the first-party-curated assumption previously attached to "claude-plugins-official." **Not yet
+independently reconfirmed from a persistent (non-ephemeral) environment** — single ephemeral-sandbox
+observation so far, strongly corroborated by official docs/changelog text. See
+`research/2026-10-24-agent-architectures-multi-agent-patterns.md`. Other configured marketplaces
+unaffected: `superpowers-dev`
 (github.com/obra/superpowers), `claude-code-workflows` (github.com/wshobson/agents, 94 plugins,
 unchanged since 2026-09-05), `impeccable` (github.com/pbakaus/impeccable — added 2026-08-06,
 design-focused, single plugin), `thedotmack` (github.com/thedotmack/claude-mem — added 2026-08-08,
@@ -122,7 +140,11 @@ from each other:
   the `model` override is ignored for it — full history) instead of starting cold, reusing the
   parent's prompt cache on its first request. Cheaper than a fresh subagent when the subtask
   genuinely needs prior context; worse than one for independent/adversarial verification or when
-  the parent conversation is mostly irrelevant bulk. See
+  the parent conversation is mostly irrelevant bulk. **Correction (2026-10-24):** fork mode is now
+  on by default more broadly (Claude Code v2.1.302, 2026-10-16) — in `claude -p`, the Agent SDK,
+  the desktop app, and VS Code, joining the terminal where it was already default
+  (`CLAUDE_CODE_FORK_SUBAGENT=0` opts out). Availability only — the cost-tradeoff guidance above is
+  unchanged. See
   `decisions/2026-09-05-token-efficiency-fork-subagent.md` (drafted recommendation, not yet applied
   to `~/.claude/CLAUDE.md`). **Correction (2026-10-10):** the plain `Agent` tool now also exposes
   an `effort` parameter (Claude Code v2.1.292, 2026-10-06), contradicting
@@ -169,11 +191,14 @@ rotation topics). Current state:
 - **`Workflow`-tool-level:** documented adversarial-verify and judge-panel idioms (independent
   skeptic subagents that try to refute a finding; multi-persona panels for ambiguous judgment
   calls) — available, **still not used on any real task** as of this baseline. This is now the
-  third consecutive pass to note this same "documented, zero real-task usage" gap since it was
-  first flagged (2026-08-22 original, reinforced 2026-09-12 via the Generator-Verifier mapping,
-  reinforced again 2026-09-19) — genuinely due for a forced try next time a verification-shaped
-  task comes up rather than letting it ride a fourth time; see
-  `research/2026-08-22-testing-verification-approaches.md` for the original flag.
+  **fifth** consecutive deep-dive pass to note this same "documented, zero real-task usage" gap
+  since it was first flagged (2026-08-22 original, reinforced 2026-09-12 via the Generator-Verifier
+  mapping, reinforced again 2026-09-19, 2026-10-03, and 2026-10-24) — this routine can't force the
+  trial itself (that's a manual-review job), but the streak is long enough to state plainly rather
+  than soften further: whatever is keeping this idiom from ever getting a real try is worth asking
+  about directly next time a verification-shaped task comes up, not filing one more "still not
+  exercised" note. See `research/2026-08-22-testing-verification-approaches.md` for the original
+  flag and `research/2026-10-24-agent-architectures-multi-agent-patterns.md` for the latest.
 - **Native `/goal` command** (Claude Code v2.1.139+, May 2026) — not previously documented here as
   a verification mechanism in its own right (baseline only mentioned it in passing as the reason
   `ralph-wiggum` was rejected). Declares a completion condition; after every turn, a separate fresh
@@ -377,8 +402,10 @@ learned from its first real run (2026-08-06), both now reflected in the spec:
   workaround.
 - **Still holding as of 2026-10-10** — eleventh consecutive successful push, first try, no
   workaround.
-- **Still holding as of 2026-10-17** (this run) — twelfth consecutive successful push, first try,
+- **Still holding as of 2026-10-17** — twelfth consecutive successful push, first try,
   no workaround.
+- **Still holding as of 2026-10-24** (this run) — thirteenth consecutive successful push, first
+  try, no workaround.
 
 ## Known gaps (as of this baseline)
 
