@@ -1,11 +1,11 @@
 # Current setup baseline
 
-Snapshot as of 2026-08-06, last updated 2026-10-24 (agent architectures & multi-agent patterns
-weekly pass — corrected the built-in plugin marketplace's name/scale/trust-model after it was
-renamed and grew ~11x, noted `fork` subagent mode's broader default-on reach, extended the
-"Weekly research routine" push-confirmation streak). Updated whenever a research pass finds
-it's gone stale, or an implemented change makes it inaccurate. This is what each weekly research
-pass diffs against — keep it factual and current, not aspirational.
+Snapshot as of 2026-08-06, last updated 2026-10-31 (prompting-techniques weekly pass — refreshed
+the `anthropic-plugin-directory` plugin count, extended the "Weekly research routine"
+push-confirmation streak, noted a drafted token-efficiency recommendation on CLAUDE.md instruction
+density pending manual review). Updated whenever a research pass finds it's gone stale, or an
+implemented change makes it inaccurate. This is what each weekly research pass diffs against —
+keep it factual and current, not aspirational.
 
 ## Skills
 
@@ -53,8 +53,10 @@ name and would need a corresponding update if so).
 **Configured marketplaces:** **Corrected 2026-10-24** — the built-in default marketplace is no
 longer `claude-plugins-official` by that name. `claude plugin marketplace list` now shows only
 `anthropic-plugin-directory` ("Built in (Anthropic Directory)") as the built-in entry, and `claude
-plugin list --available --json` shows it carrying **3,598 plugins**, up ~11x from 315 as recently
-as 2026-10-17. Corroborated by two first-party sources: a claude.ai support article describing a
+plugin list --available --json` shows it carrying **3,598 plugins** as of 2026-10-24, up ~11x from
+315 as recently as 2026-10-17 — then **3,601 plugins** as of 2026-10-31 (+3, a much smaller
+week-over-week change, consistent with the count settling into normal incremental growth rather
+than continuing to balloon). Corroborated by two first-party sources: a claude.ai support article describing a
 single unified skills/connectors/plugins directory on claude.ai, and Claude Code's own changelog
 (v2.1.299/2.1.304/2.1.309, Oct 14–22 2026) describing plugins/skills now syncing from claude.ai
 into Claude Code sessions (including Cowork cloud sessions — this routine's own context) as
@@ -336,6 +338,15 @@ legacy long-lived-SSE patterns.
   `fork`-mode carrying a long parent conversation). See
   `decisions/2026-10-10-token-efficiency-haiku-pricing-cliff.md` (drafted recommendation, not yet
   applied).
+- **Instruction-density lever (2026-10-31)** — Anthropic's own Claude Code team reports cutting
+  over 80% of Claude Code's system prompt for Claude 5-generation models with no measurable eval
+  loss, favoring concise/judgment-preserving instructions and well-designed tool interfaces over
+  rigid rules and hardcoded examples. See
+  `decisions/2026-10-31-token-efficiency-concise-instructions.md` (drafted recommendation, not yet
+  applied — two required not-applicable boundaries: never for hard-boundary instructions like the
+  git-safety protocol or this section's own quality-first guardrail, and a bias for writing new
+  instructions rather than a license to retroactively prune existing ones without an eval
+  harness this account doesn't have).
 
 ## Browser E2E testing
 
@@ -404,7 +415,9 @@ learned from its first real run (2026-08-06), both now reflected in the spec:
   workaround.
 - **Still holding as of 2026-10-17** — twelfth consecutive successful push, first try,
   no workaround.
-- **Still holding as of 2026-10-24** (this run) — thirteenth consecutive successful push, first
+- **Still holding as of 2026-10-24** — thirteenth consecutive successful push, first
+  try, no workaround.
+- **Still holding as of 2026-10-31** (this run) — fourteenth consecutive successful push, first
   try, no workaround.
 
 ## Known gaps (as of this baseline)

@@ -3,6 +3,23 @@
 Running index of changes actually implemented (not just researched/proposed). Newest first, each
 entry links to its full `decisions/` record.
 
+## 2026-10-31
+
+- **Fifteenth weekly research pass: prompting techniques deep-dive (rotation's 3rd topic, lap 3).**
+  Skills scan: `anthropic-plugin-directory` grew 3598 → 3601 (+3, a much smaller change than the
+  prior week's ~11x restructuring jump); 22 prompting-technique-relevant plugins individually
+  evaluated and rejected, including `mackforge-red-team` (a third-party attempt at the same
+  Generator-Verifier/adversarial-verify pattern this account's native `Workflow` tool already has,
+  still unexercised after five+ passes) and `superpowers-optimized` (a competing fork of the
+  already-installed `superpowers`). No plugin recommended. Token-efficiency check surfaced a
+  first-party Anthropic finding (Claude Code team cut >80% of Claude Code's own system prompt for
+  Claude 5-generation models with no measurable eval loss) — **recommended, not applied**: a
+  concise-new-instructions bias for `~/.claude/CLAUDE.md`, with two required boundaries (never for
+  hard-boundary instructions; a bias for new writing, not retroactive pruning without an eval
+  harness). See
+  [`research/2026-10-31-prompting-techniques.md`](research/2026-10-31-prompting-techniques.md) and
+  [`decisions/2026-10-31-token-efficiency-concise-instructions.md`](decisions/2026-10-31-token-efficiency-concise-instructions.md).
+
 ## 2026-10-24
 
 - **Fourteenth weekly research pass: agent architectures & multi-agent patterns deep-dive
